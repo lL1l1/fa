@@ -682,15 +682,20 @@ Weapon = ClassWeapon(WeaponMethods) {
     SetWeaponEnabled = function(self, enable)
         if not IsDestroyed(self) then
             if not enable then
+                WeaponMethods.ChangeMaxRadius(self, 0)
+                WeaponMethods.ChangeMinRadius(self, 0)
                 self:SetEnabled(enable)
                 return
             end
+
             local enabledByEnh = self.Blueprint.EnabledByEnhancement
             if enabledByEnh then
                 local enhancements = SimUnitEnhancements[self.unit.EntityId]
                 if enhancements then
                     for _, enh in enhancements do
                         if enh == enabledByEnh then
+                            WeaponMethods.ChangeMaxRadius(self, self:GetMaxRadius())
+                            WeaponMethods.ChangeMinRadius(self, self:GetMinRadius())
                             self:SetEnabled(enable)
                             return
                         end
@@ -699,6 +704,8 @@ Weapon = ClassWeapon(WeaponMethods) {
                 -- enhancement needed, but doesn't have it; don't allow weapon to be enabled
                 return
             end
+            WeaponMethods.ChangeMaxRadius(self, self:GetMaxRadius())
+            WeaponMethods.ChangeMinRadius(self, self:GetMinRadius())
             self:SetEnabled(enable)
         end
     end,
