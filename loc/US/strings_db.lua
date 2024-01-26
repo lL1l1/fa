@@ -1432,7 +1432,7 @@ Unit_Description_0006="Increases the speed at which the ACU repairs itself.\n\n+
 Unit_Description_0007="Grants Tech 3 and Experimental schematic access and further increases the ACU's build speed and maximum health.\n\n+58 Buildpower\n+1000 Health\n+10 Regen"
 Unit_Description_0008="Doubles the main cannon's damage, and increases its range and that of Overcharge.\n\n+100 Main cannon damage\n+8 Main cannon range"
 Unit_Description_0009="Tactical Cruise Missiles replaced by much more expensive, powerful Tactical Nuclear Missiles."
-Unit_Description_0010="Adds Teleportation capability. Requires considerable energy to activate."
+Unit_Description_0010="Adds Teleportation capability. Requires considerable energy to activate.\n\nMaximum Range: 350"
 Unit_Description_0011="Creates a Bubble Shield around the ACU, which protects friendly units inside it. If present, the shield will transfer a portion of the damage received to intersecting shield bubbles. Requires energy to run.\n\nShield Regen Rate = 60 HP/s\nShield Recharge Time = 90 seconds"
 Unit_Description_0012="Increases ACU's resource generation to 15 mass per second and 2520 energy per second."
 Unit_Description_0013="Creates a protective Personal Shield around the ACU. Requires energy to run.\n\nShield Regen Rate = 30 HP/s\nShield Recharge Time = 140 seconds"
@@ -1589,7 +1589,7 @@ Unit_Description_0304="The Armored Command Unit (ACU) is a combination of barrac
 Unit_Description_0106="Increases ACU's resource generation to 13 mass per second and 2720 energy per second."
 Unit_Description_0107="Personal Cloaking further hiding the ACU from optical sensors and massively boosts HP. Countered by omni sensors. Costs a large amount of energy to run.\n\n+12000 Health"
 Unit_Description_0108="Personal Stealth hiding the ACU from radar. Countered by omni sensors. Costs energy to run.\n\n+2000 Health"
-Unit_Description_0109="Adds Teleportation capability. Requires considerable energy to activate."
+Unit_Description_0109="Adds Teleportation capability. Requires considerable energy to activate.\n\nMaximum Range: 350"
 Unit_Description_0110="Grants Tech 2 schematic access and increases the ACU's build speed and maximum health.\n\n+32 Buildpower\n+2000 Health\n+10 Regen"
 Unit_Description_0111="Grants Tech 3 and Experimental schematic access and further increases the ACU's build speed and maximum health.\n\n+58 Buildpower\n+1500 Health\n+10 Regen"
 Unit_Description_0112="Doubles the main cannon's rate of fire, and increases its range and that of Overcharge. Increases the range of the Microwave Laser if present.\n\n+100% Main cannon rate of fire\n+8 Main cannon range\n+8 Microwave Laser range"
@@ -1758,7 +1758,7 @@ Unit_Description_0162="Increases ACU's resource generation to 19 mass per second
 Unit_Description_0163="Increases ACU's resource generation to 37 mass per second and 3420 energy per second."
 Unit_Description_0164="Creates a rapidly-recharging, protective Personal Shield around the ACU. Requires energy to run.\n\nShield Regen Rate = 30 HP/s\nShield Recharge Time = 75 seconds"
 Unit_Description_0165="Greatly increases the Personal Shield's HP. Requires energy to run.\n\nShield Regen Rate = 32 HP/s\nShield Recharge Time = 160 seconds"
-Unit_Description_0166="Adds Teleportation capability. Requires considerable energy to activate."
+Unit_Description_0166="Adds Teleportation capability. Requires considerable energy to activate.\n\nMaximum Range: 350"
 Unit_Description_0466_faf="Further increases the range of the ACU's main cannon and that of Overcharge.\n\n+5 Main cannon range"
 
 -- AEON -- Support Commander Units/Upgrades
@@ -1770,7 +1770,7 @@ Unit_Description_0171="Creates a protective Personal Shield around the SACU. Req
 Unit_Description_0172="Greatly improves Personal Shield HP and regeneration. Requires energy to run.\n\n+20000 Personal Shield Health\n+80 Personal Shield Regen\n-10 Personal Shield Recharge Time"
 Unit_Description_0173="Increases main cannon range and grants Area-Of-Effect damage radius.\n\n+10 Main cannon range\n+3.5 Main cannon damage radius"
 Unit_Description_0174="Massively increases the rate at which the SACU repairs its armour.\n\n+283 Regen"
-Unit_Description_0175="Adds Teleportation capability. Requires considerable energy to activate."
+Unit_Description_0175="Adds Teleportation capability. Requires considerable energy to activate.\n\nMaximum Range: 350"
 
 -- AEON -- Land Units
 Unit_Description_0223="Fast, lightly armoured, amphibious reconnaissance vehicle. Armed with a machine gun and a basic sensor suite."
@@ -1904,7 +1904,7 @@ Unit_Description_s284="Constructs Tech 3 Naval units. Buildable for a much cheap
 
 -- SERAPHIM -- Armored Commander Unit/Upgrades
 Unit_Description_0420="The Armored Command Unit (ACU) is a combination of barracks and command center. Contains all the blueprints necessary to build a basic army from scratch. Upgradeable with combat enhancements, advanced engineering suites, resource allocation system, and teleportation."
-Unit_Description_0421="Adds Teleportation capability. Requires considerable energy to activate."
+Unit_Description_0421="Adds Teleportation capability. Requires considerable energy to activate.\n\nMaximum Range: 350"
 Unit_Description_0422="Massively increases the rate at which the ACU repairs its armour as well as providing an HP boost.\n\n+2000 Health\n+60 Regen"
 Unit_Description_0424="Increases ACU's resource generation to 17 mass per second and 2020 energy per second."
 Unit_Description_0425="Increases ACU's resource generation to 33 mass per second and 4020 energy per second."
@@ -1924,7 +1924,7 @@ Unit_Description_0435="Massively increases the rate at which the SACU repairs it
 Unit_Description_0436="Greatly increases the range of the SACU's main cannon, overcharge if present, and sensors.\n\n+10 Main cannon range\n+44 Omni Radius\n+6 Vision Radius"
 Unit_Description_0437="Massively increases SACU build speed.\n\n+42 Buildpower"
 Unit_Description_0438="Creates a protective Personal Shield around the SACU. Requires energy to run.\n\nShield Regen Rate = 22 HP/s\nShield Recharge Time = 160 seconds"
-Unit_Description_0439="Adds Teleportation capability. Requires considerable energy to activate."
+Unit_Description_0439="Adds Teleportation capability. Requires considerable energy to activate.\n\nMaximum Range: 350"
 Unit_Description_0440="Expands the SACU's weaponry with an Overcharge function identical to that of the standard ACU. Requires 100000 energy storage for maximum damage."
 
 -- SERAPHIM -- Land Units

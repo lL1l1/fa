@@ -17,7 +17,7 @@ Description = {
     ['uel0001-ees'] = "<LOC Unit_Description_0007> Replaces the Tech 2 Engineering Suite. Expands the number of available schematics and further increases the ACU's build speed and maximum health.",
     ['uel0001-hamc'] = "<LOC Unit_Description_0008> Increases main cannon's damage output by several factors. Also increases range of main cannon and Overcharge.",
     ['uel0001-srtn'] = "<LOC Unit_Description_0009> Adds a short-range tactical nuke.",
-    ['uel0001-pqt'] = "<LOC Unit_Description_0010> Adds teleporter. Requires considerable Energy to activate.",
+    ['uel0001-pqt'] = "<LOC Unit_Description_0010> Adds teleporter. Requires considerable Energy to activate.\n\nMaximum Range: 350",
     ['uel0001-sgf'] = "<LOC Unit_Description_0011> Expands the radius of the ACU's personal shield. Requires Energy to run.",
     ['uel0001-isb'] = "<LOC Unit_Description_0012> Increases ACU's resource generation.",
     ['uel0001-psg'] = "<LOC Unit_Description_0013> Creates a protective shield around the ACU. Requires Energy to run.",
@@ -168,7 +168,7 @@ Description = {
     ['url0001-pcg'] = "<LOC Unit_Description_0107> Cloaks the ACU from optical sensors and increases maximum health. Can be detected by Omni Sensors. Requires Energy to run.",
     ['url0001-srs'] = "<LOC Unit_Description_0465_faf>Massively increases the rate at which the ACU repairs its armour.",
     ['url0001-psg'] = "<LOC Unit_Description_0108> Hides the ACU from radar. Requires Energy to run.",
-    ['url0001-pqt'] = "<LOC Unit_Description_0109> Adds teleporter. Requires considerable Energy to activate.",
+    ['url0001-pqt'] = "<LOC Unit_Description_0109> Adds teleporter. Requires considerable Energy to activate.\n\nMaximum Range: 350",
     ['url0001-aes'] = "<LOC Unit_Description_0110> Expands the number of available schematics and increases the ACU's build speed and maximum health.",
     ['url0001-ees'] = "<LOC Unit_Description_0111> Replaces the Tech 2 Engineering Suite. Expands the number of available schematics and further increases the ACU's build speed and maximum health.",
     ['url0001-acu'] = "<LOC Unit_Description_0112> Increases main cannon's rate of fire and range. Also increases range of the Molecular Ripper and Overcharge.",
@@ -337,7 +337,7 @@ Description = {
     ['ual0001-eras'] = "<LOC Unit_Description_0163> Requires Resource Allocation System. Further increases ACU's resource generation.",
     ['ual0001-ptsg'] = "<LOC Unit_Description_0164> Creates a protective shield around the ACU. Requires Energy to run.",
     ['ual0001-phtsg'] = "<LOC Unit_Description_0165> Enhances the protective shield around the ACU. Requires Energy to run.",
-    ['ual0001-pqt'] = "<LOC Unit_Description_0166> Adds teleporter. Requires considerable Energy to activate.",
+    ['ual0001-pqt'] = "<LOC Unit_Description_0166> Adds teleporter. Requires considerable Energy to activate.\n\nMaximum Range: 350",
 
     -- AEON -- Support Commander Units/Upgrades
     ['ual0301'] = "<LOC Unit_Description_0167> A multi-purpose construction, repair, capture and reclamation unit. Equivalent to a Tech 3 Engineer.",
@@ -348,7 +348,7 @@ Description = {
     ['ual0301-phtsg'] = "<LOC Unit_Description_0172> Upgrades the SACU's protective shield. Requires Energy to run.",
     ['ual0301-ss'] = "<LOC Unit_Description_0173> Equips the standard SACU's Reacton cannon with area-of-effect damage.",
     ['ual0301-sic'] = "<LOC Unit_Description_0174> Greatly increases the speed at which the SACU repairs itself.",
-    ['ual0301-pqt'] = "<LOC Unit_Description_0175> Adds teleporter. Requires considerable Energy to activate.",
+    ['ual0301-pqt'] = "<LOC Unit_Description_0175> Adds teleporter. Requires considerable Energy to activate.\n\nMaximum Range: 350",
 
     -- AEON -- Support Commander Presets
     ['ual0301_Engineer']     = "<LOC ual0301_Engineer_help> Support Armored Command Unit. Enhanced during construction with rapid fabrication enhancement.",
@@ -474,7 +474,7 @@ Description = {
 
     -- SERAPHIM -- Armored Commander Unit/Upgrades
     ['xsl0001'] = "<LOC Unit_Description_0420> Armored Commander is a combination of barracks and command center. Contains all the blueprints necessary to build a basic army from scratch. Upgradeable with combat enhancements, advanced engineering suits, resource allocation system, and teleporting.",
-    ['xsl0001-pqt'] = "<LOC Unit_Description_0421> Adds teleporter. Requires considerable Energy to activate.",
+    ['xsl0001-pqt'] = "<LOC Unit_Description_0421> Adds teleporter. Requires considerable Energy to activate.\n\nMaximum Range: 350",
     ['xsl0001-dss'] = "<LOC Unit_Description_0422> Increases the speed at which the ACU repairs itself. Also increases hit points.",
     ['xsl0001-adss'] = "<LOC Unit_Description_0454> Further increases the speed at which the ACU repairs itself. Also increases hitpoints.",
     ['xsl0001-ras'] = "<LOC Unit_Description_0424> Increases ACU's resource generation.",
@@ -494,7 +494,7 @@ Description = {
     ['xsl0301-sre'] = "<LOC Unit_Description_0436> Greatly expands the range of the standard on-board SACU sensor systems, including Omni.",
     ['xsl0301-efm'] = "<LOC Unit_Description_0437> Speeds up all engineering-related functions.",
     ['xsl0301-sp'] = "<LOC Unit_Description_0438> Adds a personal shield generator to the SACU.",
-    ['xsl0301-pqt'] = "<LOC Unit_Description_0439> Adds teleporter. Requires considerable Energy to activate.",
+    ['xsl0301-pqt'] = "<LOC Unit_Description_0439> Adds teleporter. Requires considerable Energy to activate.\n\nMaximum Range: 350",
     ['xsl0301-oc'] = "<LOC Unit_Description_0440> Single shot destroys most units. Consumes large amount of Energy.",
 
     -- SERAPHIM -- Support Commander Presets
