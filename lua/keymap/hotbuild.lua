@@ -615,11 +615,11 @@ end
 -- Does support upgrading T1 structures (facs, radars, etc.) that are currently upgrading to T2 to T3 when issued
 function buildActionUpgrade()
     local selectedUnits = GetSelectedUnits()
-    local availableOrders, availableToggles, buildableCategories = GetUnitCommandData(selectedUnits)
     local result = true
 
     for index, unit in selectedUnits do
         local bp = unit:GetBlueprint()
+        local _, _, buildableCategories = GetUnitCommandDataOfUnit(unit)
         -- If upgradeTab[bp.BlueprintId] returns a table, there are two or more possible upgrades, e.g. HQ and
         -- support factory. If instead bp.General.UpgradesTo returns a string, then there is only one possible
         -- upgrade, e.g. for a radar. For our helper function IssueUpgradeCommand we want a table, hence the { }
