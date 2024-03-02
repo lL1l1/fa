@@ -18,6 +18,7 @@ local OverchargeCanKill = import("/lua/ui/game/unitview.lua").OverchargeCanKill
 local CommandMode = import("/lua/ui/game/commandmode.lua")
 
 local TeleportReticle = import("/lua/ui/controls/reticles/teleport.lua").TeleportReticle
+local ReclaimReticle = import("/lua/ui/controls/reticles/reclaim.lua").ReclaimReticle
 
 WorldViewParams = {
     ui_SelectTolerance = 7.0,
@@ -703,6 +704,7 @@ WorldView = ClassUI(moho.UIWorldView, Control) {
                 self.CanIssueReclaimOrdersOld = canIssueReclaimOrders
                 self.ViaRightMouseButtonOld = viaRightMouseButton
                 self:ApplyReclaimCursor(identifier, canIssueReclaimOrders, viaCommandMode, true)
+                ReclaimReticle(self)
             else
                 if (canIssueReclaimOrders ~= self.CanIssueReclaimOrdersOld) or (viaRightMouseButton ~= self.ViaRightMouseButtonOld) then
                     self:ApplyReclaimCursor(identifier, canIssueReclaimOrders, viaCommandMode, true)

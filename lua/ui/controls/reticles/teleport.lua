@@ -31,8 +31,8 @@ local GetSelectedUnits = GetSelectedUnits
 
 --- Reticle for teleport cost info
 ---@class UITeleportReticle : UIReticle
----@field ePrefix Text
----@field tPrefix Text
+---@field EnergyCostIcon Bitmap
+---@field BuildTimeIcon Bitmap
 ---@field eText Text
 ---@field tText Text
 TeleportReticle = ClassUI(Reticle) {
