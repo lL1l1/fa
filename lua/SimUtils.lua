@@ -41,7 +41,7 @@ local sharedUnits = {}
 ---@param units Unit[]
 ---@param toArmy number
 ---@param captured boolean
----@param noRestrictions boolean
+---@param noRestrictions? boolean
 ---@return Unit[]?
 function TransferUnitsOwnership(units, toArmy, captured, noRestrictions)
     local toBrain = GetArmyBrain(toArmy)
@@ -772,8 +772,8 @@ local function KillWalls(self)
     end
 end
 
---- Remove the borrowed status from units we lent to allies.
----@param brains AIBrain[]
+--- Remove the borrowed status from units we lent to a set of `brains`.
+---@param brains AIBrain[] Usually our allies
 ---@param selfIndex number
 local function TransferOwnershipOfBorrowedUnits(brains, selfIndex)
     for index, brain in brains do
@@ -848,7 +848,7 @@ local function TransferUnitsToKiller(self)
     WaitSeconds(1)
 end
 
---- Kills an army according to the given share condition.
+--- Kills my army according to the given share condition.
 ---@param self AIBrain
 ---@param shareOption 'FullShare' | 'ShareUntilDeath' | 'PartialShare' | 'TransferToKiller' | 'Defectors' | 'CivilianDeserter'
 function KillArmy(self, shareOption)
@@ -902,7 +902,7 @@ end
 
 local StartCountdown = StartCountdown -- as defined in SymSync.lua
 
---- When the shared ACUs die or recall after the share time expires, kills an army according to the given share condition.
+--- Shares all units including ACUs. When the shared ACUs die or recall after `shareTime`, kills my army according to the given share condition.
 ---@param self AIBrain
 ---@param shareOption 'FullShare' | 'ShareUntilDeath' | 'PartialShare' | 'TransferToKiller' | 'Defectors' | 'CivilianDeserter'
 ---@param shareTime number Game time in ticks
@@ -912,7 +912,7 @@ function KillArmyOnDelayedRecall(self, shareOption, shareTime)
     local newUnits = TransferUnitsToHighestBrain(self, brainCategories.Allies, 'FullShare', categories.ALLUNITS)
     local sharedCommanders = EntityCategoryFilterDown(categories.COMMAND, newUnits)
 
-    -- create a countdown to show when the ACU recalls
+    -- create a countdown to show when the ACU recalls (similar to timed self-destruct)
     for _, com in sharedCommanders do
         StartCountdown(com.EntityId, math.floor((shareTime - GetGameTick())/10))
     end
@@ -934,7 +934,7 @@ function KillArmyOnDelayedRecall(self, shareOption, shareTime)
     KillArmy(self, shareOption)
 end
 
---- When the shared ACUs die, kills an army according to the given share condition.
+--- Shares all units including ACUs. When the shared ACUs die, kills my army according to the given share condition.
 ---@param self AIBrain
 ---@param shareOption 'FullShare' | 'ShareUntilDeath' | 'PartialShare' | 'TransferToKiller' | 'Defectors' | 'CivilianDeserter'
 function KillArmyOnACUDeath(self, shareOption)
