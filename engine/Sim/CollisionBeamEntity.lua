@@ -1,31 +1,34 @@
 ---@meta
 
+---@class BeamEntitySpec
+---@field Weapon
+---@field BeamBone
+---@field OtherBone
+---@field CollisionCheckInterval
+
 ---@class moho.CollisionBeamEntity : moho.entity_methods
 local CCollisionBeamEntity = {}
 
----
---  CollisionBeamEntity:Enable()
+--- Toggles whether the beam is enabled or disabled
 function CCollisionBeamEntity:Enable()
 end
 
----
---  CCollisionBeamEntity:GetLauncher()
+--- Returns the Weapon object that the beam belongs to
 function CCollisionBeamEntity:GetLauncher()
 end
 
----
---  bool = CCollisionBeamEntity:IsEnabled()
+---@return boolean Enabled
 function CCollisionBeamEntity:IsEnabled()
 end
 
----
---  CCollisionBeamEntity:SetBeamFx(beamEmitter, checkCollision) -- set an emitter to be controlled by this beam. Its length parameter will be set from the beam entity's collision distance.
+--- Set an emitter whose length parameter will be controlled by the beam entity's collision distance
+---@param beamEmitter moho.IEffect
+---@param checkCollision boolean
 function CCollisionBeamEntity:SetBeamFx(beamEmitter,  checkCollision)
 end
 
----
---  beam = CreateCollisionBeam(spec)spec is a table with the following fields defined:
-function CCollisionBeamEntity:__init()
+---@param ... BeamEntitySpec
+function CCollisionBeamEntity:__init(...)
 end
 
 return CCollisionBeamEntity
