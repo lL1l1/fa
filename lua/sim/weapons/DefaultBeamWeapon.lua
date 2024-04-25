@@ -38,7 +38,7 @@ DefaultBeamWeapon = ClassWeapon(DefaultProjectileWeapon) {
                     Weapon = self,
                     BeamBone = 0,
                     OtherBone = muzzle,
-                    CollisionCheckInterval = bp.BeamCollisionDelay * 10, -- Why is this multiplied by 10? IceDreamer
+                    CollisionCheckInterval = bp.BeamCollisionDelay * 10, -- `BeamCollisionDelay` is in seconds, but `CollisionCheckInterval` uses game ticks, so multiply by 10
                 }
                 local beamTable = { Beam = beam, Muzzle = muzzle, Destroyables = {} }
                 table.insert(self.Beams, beamTable)

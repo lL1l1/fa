@@ -44,8 +44,7 @@
 ---@field AutoInitiateAttackCommand? boolean
 --- Ballistic arcs that should be used on the projectile
 ---@field BallisticArc? WeaponBallisticArc
---- every `X/10+1` game ticks, this beam will collide and do damage - using `0` will cause beams to
---- damage every tick
+--- how many game ticks (in seconds) to wait after every beam collision before colliding and doing damage again
 ---@field BeamCollisionDelay number
 --- the amount of time the beam exists
 ---@field BeamLifetime number
