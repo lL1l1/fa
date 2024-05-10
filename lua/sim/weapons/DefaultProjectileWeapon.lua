@@ -1196,6 +1196,7 @@ DefaultProjectileWeapon = ClassWeapon(Weapon) {
         end,
 
         OnLostTarget = function(self)
+            -- Override default OnLostTarget to prevent bypassing reload time by switching to idle state immediately
         end,
     },
 
