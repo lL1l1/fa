@@ -24,6 +24,8 @@ local Weapon = import("/lua/sim/weapon.lua").Weapon
 local IntelComponent = import('/lua/defaultcomponents.lua').IntelComponent
 local VeterancyComponent = import('/lua/defaultcomponents.lua').VeterancyComponent
 
+local GetBlueprintCaptureCost = import('/lua/shared/captureCost.lua').GetBlueprintCaptureCost
+
 local TrashBag = TrashBag
 local TrashAdd = TrashBag.Add
 local TrashDestroy = TrashBag.Destroy
@@ -83,6 +85,17 @@ SyncMeta = {
     end,
 }
 
+--- All the following unit fields originate from buffs.
+---@class UnitBuffFields
+---@field EnergyBuildAdjMod? number
+---@field MassBuildAdjMod? number
+---@field EnergyMaintAdjMod? number
+---@field MassMaintAdjMod? number
+---@field EnergyProdAdjMod? number
+---@field MassProdAdjMod? number
+---@field AdjEnergyMod? number
+---@field AdjRoFMod? number
+
 ---@class UnitCommand
 ---@field x number
 ---@field y number
@@ -107,7 +120,8 @@ SyncMeta = {
 local cUnit = moho.unit_methods
 local cUnitGetBuildRate = cUnit.GetBuildRate
 
----@class Unit : moho.unit_methods, InternalObject, IntelComponent, VeterancyComponent, AIUnitProperties
+---@class Unit : moho.unit_methods, InternalObject, IntelComponent, VeterancyComponent, AIUnitProperties, UnitBuffFields
+---@field CDRHome? LocationType
 ---@field AIManagerIdentifier? string
 ---@field Repairers table<EntityId, Unit>
 ---@field Brain AIBrain
@@ -138,6 +152,7 @@ local cUnitGetBuildRate = cUnit.GetBuildRate
 ---@field SiloProjectile? ProjectileBlueprint
 ---@field ReclaimTimeMultiplier? number
 ---@field CaptureTimeMultiplier? number
+---@field PlatoonHandle? Platoon
 Unit = ClassUnit(moho.unit_methods, IntelComponent, VeterancyComponent) {
 
     IsUnit = true,
@@ -1083,7 +1098,8 @@ Unit = ClassUnit(moho.unit_methods, IntelComponent, VeterancyComponent) {
     ---@param self Unit
     GetBuildRate = function(self)
         local buildrate = cUnitGetBuildRate(self)
-        if buildrate < 0 then
+        -- prevent division by zero
+        if buildrate <= 0 then
             buildrate = 0.00001
         end
 
@@ -1160,7 +1176,7 @@ Unit = ClassUnit(moho.unit_methods, IntelComponent, VeterancyComponent) {
                     mass = (mass / siloBuildRate) * (self:GetBuildRate() or 0)
                 else
                     time, energy, mass = self:GetBuildCosts(focus:GetBlueprint())
-                    if self:IsUnitState('Repairing') and focus.isFinishedUnit then
+                    if self:IsUnitState('Repairing') and focus.isFinishedUnit then -- also applies to shield assisting
                         energy = energy * repairRatio
                         mass = mass * repairRatio
                     end
@@ -1481,44 +1497,48 @@ Unit = ClassUnit(moho.unit_methods, IntelComponent, VeterancyComponent) {
         local bp = self.Blueprint
         local army = self.Army
 
-        -- Units killed while being invisible because they're teleporting should show when they're killed
-        if self.TeleportFx_IsInvisible then
-            self:ShowBone(0, true)
-            self:ShowEnhancementBones()
-        end
+        -- Skip all audio/visual/death threads/shields/etc. if we're in internal storage
+        -- (presumably these should already have been removed when the unit entered storage)
+        if type ~= "TransportDamage" then
+            -- Units killed while being invisible because they're teleporting should show when they're killed
+            if self.TeleportFx_IsInvisible then
+                self:ShowBone(0, true)
+                self:ShowEnhancementBones()
+            end
 
-        if layer == 'Water' and bp.Physics.MotionType == 'RULEUMT_Hover' then
-            self:PlayUnitSound('HoverKilledOnWater')
-        elseif layer == 'Land' and bp.Physics.MotionType == 'RULEUMT_AmphibiousFloating' then
-            -- Handle ships that can walk on land
-            self:PlayUnitSound('AmphibiousFloatingKilledOnLand')
-        else
-            self:PlayUnitSound('Killed')
-        end
+            if layer == 'Water' and bp.Physics.MotionType == 'RULEUMT_Hover' then
+                self:PlayUnitSound('HoverKilledOnWater')
+            elseif layer == 'Land' and bp.Physics.MotionType == 'RULEUMT_AmphibiousFloating' then
+                -- Handle ships that can walk on land
+                self:PlayUnitSound('AmphibiousFloatingKilledOnLand')
+            else
+                self:PlayUnitSound('Killed')
+            end
 
-        -- apply death animation on half built units (do not apply for ML and mega)
-        local FractionThreshold = bp.General.FractionThreshold or 0.5
-        if self.PlayDeathAnimation and self:GetFractionComplete() > FractionThreshold then
-            self:ForkThread(self.PlayAnimationThread, 'AnimationDeath')
-            self.DisallowCollisions = true
-        end
+            -- apply death animation on half built units (do not apply for ML and mega)
+            local FractionThreshold = bp.General.FractionThreshold or 0.5
+            if self.PlayDeathAnimation and self:GetFractionComplete() > FractionThreshold then
+                self:ForkThread(self.PlayAnimationThread, 'AnimationDeath')
+                self.DisallowCollisions = true
+            end
 
-        self:DoUnitCallbacks('OnKilled')
-        if self.UnitBeingTeleported and not self.UnitBeingTeleported.Dead then
-            self.UnitBeingTeleported:Destroy()
-            self.UnitBeingTeleported = nil
-        end
+            self:DoUnitCallbacks('OnKilled')
+            if self.UnitBeingTeleported and not self.UnitBeingTeleported.Dead then
+                self.UnitBeingTeleported:Destroy()
+                self.UnitBeingTeleported = nil
+            end
 
-        if self.DeathWeaponEnabled ~= false then
-            self:DoDeathWeapon()
+            if self.DeathWeaponEnabled ~= false then
+                self:DoDeathWeapon()
+            end
+
+            self:DisableShield()
+            self:DisableUnitIntel('Killed')
+            self:ForkThread(self.DeathThread, overkillRatio , instigator)
         end
 
         -- veterancy computations should happen after triggering death weapons
         VeterancyComponent.VeterancyDispersal(self)
-
-        self:DisableShield()
-        self:DisableUnitIntel('Killed')
-        self:ForkThread(self.DeathThread, overkillRatio , instigator)
 
         -- awareness for traitor game mode and game statistics
         ArmyBrains[army].LastUnitKilledBy = (instigator or self).Army
@@ -1530,6 +1550,11 @@ Unit = ClassUnit(moho.unit_methods, IntelComponent, VeterancyComponent) {
         end
 
         self.Brain:OnUnitKilled(self, instigator, type, overkillRatio)
+
+        -- If we're in internal storage, destroy the unit since DeathThread isn't played to destroy it
+        if type == "TransportDamage" then
+            self:Destroy()
+        end
     end,
 
     ---@param self Unit
@@ -1667,7 +1692,9 @@ Unit = ClassUnit(moho.unit_methods, IntelComponent, VeterancyComponent) {
         if overkillRatio and overkillRatio > 1.0 then
             return
         end
-        if self:GetFractionComplete() < 0.5 then
+        local bp = self.Blueprint
+        local fractionComplete = self:GetFractionComplete()
+        if fractionComplete < 0.5 or ((bp.TechCategory == 'EXPERIMENTAL' or bp.CategoriesHash["STRUCTURE"]) and fractionComplete < 1) then
             return
         end
         return self:CreateWreckageProp(overkillRatio)
@@ -2316,8 +2343,6 @@ Unit = ClassUnit(moho.unit_methods, IntelComponent, VeterancyComponent) {
             self:Kill()
             return false
         end
-
-
 
         -- Create any idle effects on unit
         if TrashEmpty(self.IdleEffectsBag) then
@@ -3354,10 +3379,9 @@ Unit = ClassUnit(moho.unit_methods, IntelComponent, VeterancyComponent) {
     end,
 
     ---@param self Unit
-    ---@param new string
-    ---@param old string
+    ---@param new HorizontalMovementState
+    ---@param old HorizontalMovementState
     OnMotionHorzEventChange = function(self, new, old)
-
         -- we can't do anything if we're dead
         if self.Dead then
             return
@@ -3397,8 +3421,8 @@ Unit = ClassUnit(moho.unit_methods, IntelComponent, VeterancyComponent) {
     end,
 
     ---@param self Unit
-    ---@param new string
-    ---@param old string
+    ---@param new VerticalMovementState
+    ---@param old VerticalMovementState
     OnMotionVertEventChange = function(self, new, old)
         if self.Dead then
             return
@@ -3513,7 +3537,7 @@ Unit = ClassUnit(moho.unit_methods, IntelComponent, VeterancyComponent) {
             end
 
             if boneTable.Tread and self:GetTTTreadType(self:GetPosition(bone)) ~= 'None' then
-                CreateSplatOnBone(self, boneTable.Tread.TreadOffset, 0, boneTable.Tread.TreadMarks, boneTable.Tread.TreadMarksSizeX, boneTable.Tread.TreadMarksSizeZ, 100, boneTable.Tread.TreadLifeTime or 15, self.Army)
+                CreateSplatOnBone(self, boneTable.Tread.TreadOffset, 0, boneTable.Tread.TreadMarks, boneTable.Tread.TreadMarksSizeX, boneTable.Tread.TreadMarksSizeZ, 100, boneTable.Tread.TreadLifeTime or 4, self.Army)
                 local treadOffsetX = boneTable.Tread.TreadOffset[1]
                 if x and x > 0 then
                     if layer ~= 'Seabed' then
@@ -3947,7 +3971,7 @@ Unit = ClassUnit(moho.unit_methods, IntelComponent, VeterancyComponent) {
         return 0, 0, 0
     end,
 
-    --- Multiplies the time it takes to capture a unit, defaults to 1.0. Often
+    --- Multiplies the time the unit takes to capture others, defaults to 1.0. Often
     --- used by campaign events.
     ---@param self Unit
     ---@param captureTimeMultiplier number
@@ -3976,8 +4000,8 @@ Unit = ClassUnit(moho.unit_methods, IntelComponent, VeterancyComponent) {
 
         -- compute capture costs
         local targetBlueprintEconomy = target.Blueprint.Economy
-        local time = ((targetBlueprintEconomy.BuildTime or 10) / self:GetBuildRate()) / 2
-        local energy = targetBlueprintEconomy.BuildCostEnergy or 100
+        local time, energy = GetBlueprintCaptureCost(target.Blueprint, self:GetBuildRate())
+
         time = time * (self.CaptureTimeMultiplier or 1)
         if time < 0 then
             time = 1

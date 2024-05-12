@@ -14,6 +14,9 @@
 ---@field [1] number    # x
 ---@field [2] number    # y (up)
 ---@field [3] number    # z
+---@field x number      # east/west
+---@field y number      # up/down
+---@field z number      # north/south
 
 ---@class Vector2
 ---@field [1] number    # x
@@ -102,7 +105,7 @@ end
 
 --- returns true if a unit category contains this unit
 ---@param category EntityCategory
----@param unit Unit | UserUnit | UnitId | Projectile
+---@param unit Unit | UserUnit | UnitId | Projectile | Blip | Prop
 ---@return boolean
 function EntityCategoryContains(category, unit)
 end

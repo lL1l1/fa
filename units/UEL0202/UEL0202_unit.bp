@@ -111,7 +111,6 @@ UnitBlueprint{
     LifeBarSize = 0.95,
     Physics = {
         BackUpDistance = 8,
-        BankingSlope = 0,
         BuildOnLayerCaps = {
             LAYER_Air = false,
             LAYER_Land = true,
@@ -129,7 +128,6 @@ UnitBlueprint{
         MeshExtentsX = 0.75,
         MeshExtentsY = 0.45,
         MeshExtentsZ = 1.25,
-        MinSpeedPercent = 0,
         MotionType = "RULEUMT_Land",
         RotateOnSpot = false,
         RotateOnSpotThreshold = 0.1,
@@ -194,7 +192,7 @@ UnitBlueprint{
             RackSalvoSize = 1,
             RackSlavedToTurret = true,
             RangeCategory = "UWRC_DirectFire",
-            RateOfFire = 0.8,
+            RateOfFire = 0.769,
             TargetPriorities = {
                 "MOBILE",
                 "(STRUCTURE * DEFENSE - ANTIMISSILE)",

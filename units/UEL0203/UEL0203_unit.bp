@@ -157,7 +157,6 @@ UnitBlueprint{
     LifeBarSize = 0.75,
     Physics = {
         BackUpDistance = 8,
-        BankingSlope = 0,
         BuildOnLayerCaps = {
             LAYER_Air = false,
             LAYER_Land = true,
@@ -176,9 +175,9 @@ UnitBlueprint{
         MeshExtentsX = 1.3,
         MeshExtentsY = 0.65,
         MeshExtentsZ = 1.5,
-        MinSpeedPercent = 0,
         MotionType = "RULEUMT_Hover",
         RotateBodyWhileMoving = true,
+        RotateOnSpot = false,
         TurnFacingRate = 120,
         TurnRadius = 5,
         TurnRate = 90,
@@ -243,7 +242,7 @@ UnitBlueprint{
             RackSalvoSize = 1,
             RackSlavedToTurret = true,
             RangeCategory = "UWRC_DirectFire",
-            RateOfFire = 3,
+            RateOfFire = 3.333,
             SlavedToBody = true,
             SlavedToBodyArcRange = 5,
             TargetPriorities = {
