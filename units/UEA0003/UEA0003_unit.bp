@@ -173,7 +173,7 @@ UnitBlueprint {
                 helpText = 'drone_rebuild',
             },
         },
-        SelectionPriority = 6,
+        SelectionPriority = 3,
         TechLevel = 'RULEUTL_Basic',
         ToggleCaps = {
             RULEUTC_WeaponToggle = true,
