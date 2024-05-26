@@ -928,8 +928,9 @@ DefaultProjectileWeapon = ClassWeapon(Weapon) {
             local currentSalvoNumber = self.CurrentSalvoNumber
             local currentRackSalvoNumber = self.CurrentRackSalvoNumber
 
-            if (currentSalvoNumber < self.NumMuzzlesFiring or self.CurrentRackSalvoNumber < self.NumRackFiring)
-                and (currentSalvoNumber > 1 or currentRackSalvoNumber > 1) -- 1 is the start of new salvo
+            -- Number being 1 is the start of a new salvo, not an incomplete one
+            if (currentSalvoNumber > 1 and currentSalvoNumber <= self.NumMuzzlesFiring)
+                or (bp.RackFireTogether and currentRackSalvoNumber > 1 and currentRackSalvoNumber <= self.NumRackBones)
             then
                 self:ForkThread(self.ResumeFiring, self)
             end
@@ -1105,7 +1106,6 @@ DefaultProjectileWeapon = ClassWeapon(Weapon) {
             if bp.RackFireTogether then
                 numRackFiring = rackBoneCount
             end
-            self.NumRackFiring = numRackFiring
 
             -- Fork timer counter thread carefully
             if not self:BeenDestroyed() and
