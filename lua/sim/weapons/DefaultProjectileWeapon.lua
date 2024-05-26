@@ -1047,16 +1047,16 @@ DefaultProjectileWeapon = ClassWeapon(Weapon) {
         ---@param self DefaultProjectileWeapon
         ---@param rateOfFire number
         RenderClockThread = function(self)
-            local totalTime = MATH_IRound(1 / self:GetWeaponRoF())
-            clockTime = self:GetFireClockRemainingSeconds()
+            local totalTicks = MATH_IRound(10 / self:GetWeaponRoF())
+            clockTicks = MATH_IRound(self:GetFireClockRemainingSeconds()*10)
+            LOG(clockTicks, totalTicks)
             local unit = self.unit
-            while clockTime >= 0 and
-                not self:BeenDestroyed() and
-                not unit.Dead do
-                unit:SetWorkProgress(1 - clockTime / totalTime)
-                clockTime = clockTime - 0.1
-                WaitSeconds(0.1)
-            end
+            repeat
+                if self:BeenDestroyed() or unit.Dead then return end
+                unit:SetWorkProgress(1 - clockTicks / totalTicks)
+                WaitTicks(1)
+                clockTicks = clockTicks - 1
+            until clockTicks < 0
         end,
 
         ---@param self DefaultProjectileWeapon
