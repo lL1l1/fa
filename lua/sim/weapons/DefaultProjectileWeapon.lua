@@ -15,6 +15,7 @@ local UnitGetTargetEntity = UnitMethods.GetTargetEntity
 local MathClamp = math.clamp
 local MATH_IRound = MATH_IRound
 local MathMax = math.max
+local MathMod = math.mod
 
 function LOGWeapon(self, string)
     LOG(("T: %d WeaponId: %s %s"):format(GetGameTick(), tostring(self), string))
@@ -1137,7 +1138,7 @@ DefaultProjectileWeapon = ClassWeapon(Weapon) {
                     self:SetFiringRandomness(randomness)
                 end
 
-                local muzzleIndex = 1
+                local muzzleIndex = 1 + MathMod(self.CurrentSalvoNumber - 1, muzzleBoneCount)
                 self.NumMuzzlesFiring = numMuzzlesFiring
 
                 while self.CurrentSalvoNumber <= numMuzzlesFiring do                
