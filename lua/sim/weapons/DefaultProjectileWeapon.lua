@@ -1048,11 +1048,12 @@ DefaultProjectileWeapon = ClassWeapon(Weapon) {
         RenderClockThread = function(self)
             local totalTime = MATH_IRound(1 / self:GetWeaponRoF())
             clockTime = self:GetFireClockRemainingSeconds()
+            local unit = self.unit
             while clockTime >= 0 and
                 not self:BeenDestroyed() and
                 not unit.Dead do
                 unit:SetWorkProgress(1 - clockTime / totalTime)
-                clockTime = clockTime - 1
+                clockTime = clockTime - 0.1
                 WaitSeconds(0.1)
             end
         end,
