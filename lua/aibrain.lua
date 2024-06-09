@@ -22,6 +22,8 @@ local CalculateBrainScore = import("/lua/sim/score.lua").CalculateBrainScore
 local FakeTeleportUnits = import("/lua/scenarioframework.lua").FakeTeleportUnits
 local Factions = import('/lua/factions.lua').GetFactions(true)
 
+local CommanderSafeTime = import("/lua/simutils.lua").CommanderSafeTime
+
 local CoroutineYield = coroutine.yield
 
 ---@class TriggerSpec
@@ -988,8 +990,7 @@ AIBrain = Class(AIBrainHQComponent, AIBrainStatisticsComponent, AIBrainJammerCom
 
                 local commanders = self:GetListOfUnits(categories.COMMAND, false)
                 for _, com in commanders do
-                    -- 2 minutes since last damaged
-                    if com.LastTickDamaged == nil or com.LastTickDamaged + 1200 <= GetGameTick() then
+                    if com.LastTickDamaged == nil or com.LastTickDamaged + CommanderSafeTime <= GetGameTick() then
                         table.insert(safeCommanders, com)
                     end
                 end
@@ -1013,7 +1014,7 @@ AIBrain = Class(AIBrainHQComponent, AIBrainStatisticsComponent, AIBrainJammerCom
                 end
 
                 if shareAcuOption == 'RecallDelayed' then
-                    local shareTime = GetGameTick() + 1200
+                    local shareTime = GetGameTick() + CommanderSafeTime
                     if shareTime < 3000 then
                         shareTime = 3000
                     end
