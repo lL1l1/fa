@@ -1000,7 +1000,8 @@ AIBrain = Class(AIBrainHQComponent, AIBrainStatisticsComponent, AIBrainJammerCom
                     shareOption = ScenarioInfo.Options.Share
                 end
 
-                if shareAcuOption == 'Recall' then
+                -- non-assassination modes can have armies abandon without commanders
+                if shareAcuOption == 'Recall' and not table.empty(safeCommanders) then
                     -- KillArmy waits 10 seconds before acting, while FakeTeleport waits 3 seconds, so the ACU shouldn't explode.
                     ForkThread(FakeTeleportUnits, safeCommanders, true)
                 end
