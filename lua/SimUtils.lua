@@ -937,6 +937,13 @@ function KillArmyOnDelayedRecall(self, shareOption, shareTime)
             WaitTicks(1)
         end
 
+        -- if all the commanders die early, assume disconnect abuse and apply standard share condition. Only makes sense in Assassination.
+        local scenarioOptions = ScenarioInfo.Options
+        if not oneComAlive and scenarioOptions.Victory == "demoralization" then
+            KillArmy(self, scenarioOptions.Share)
+            return
+        end
+
         -- KillArmy waits 10 seconds before acting, while FakeTeleport waits 3 seconds, so the ACU shouldn't explode.
         ForkThread(FakeTeleportUnits, sharedCommanders, true)
     end
@@ -953,6 +960,8 @@ function KillArmyOnACUDeath(self, shareOption)
     local sharedCommanders = EntityCategoryFilterDown(categories.COMMAND, newUnits)
 
     if not table.empty(sharedCommanders) then
+        local shareTick = GetGameTick()
+
         local oneComAlive = true
         while oneComAlive do
             oneComAlive = false
@@ -963,6 +972,13 @@ function KillArmyOnACUDeath(self, shareOption)
                 end
             end
             WaitTicks(1)
+        end
+
+        -- if all the commanders die early, assume disconnect abuse and apply standard share condition. Only makes sense in Assassination.
+        local scenarioOptions = ScenarioInfo.Options
+        if not oneComAlive and shareTime + CommanderSafeTime <= GetGameTick() and scenarioOptions.Victory == "demoralization" then
+            KillArmy(self, scenarioOptions.Share)
+            return
         end
     end
 
