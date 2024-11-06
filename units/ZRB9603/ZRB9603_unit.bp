@@ -92,10 +92,10 @@ UnitBlueprint{
         UniformScale = 0.1,
     },
     Economy = {
-        BuildCostEnergy = 11000,
-        BuildCostMass = 2200,
+        BuildCostEnergy = 9000,
+        BuildCostMass = 1800,
         BuildRate = 150,
-        BuildTime = 10800,
+        BuildTime = 8800,
         BuildableCategory = {
             "BUILTBYTIER3FACTORY CYBRAN MOBILE CONSTRUCTION",
             "BUILTBYTIER3FACTORY CYBRAN STRUCTURE NAVAL",

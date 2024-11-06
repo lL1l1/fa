@@ -96,10 +96,10 @@ UnitBlueprint{
         UniformScale = 0.05,
     },
     Economy = {
-        BuildCostEnergy = 11000,
-        BuildCostMass = 2200,
+        BuildCostEnergy = 9000,
+        BuildCostMass = 1800,
         BuildRate = 150,
-        BuildTime = 10800,
+        BuildTime = 8800,
         BuildableCategory = {
             "BUILTBYTIER3FACTORY SERAPHIM MOBILE CONSTRUCTION",
             "BUILTBYTIER3FACTORY SERAPHIM STRUCTURE NAVAL",
