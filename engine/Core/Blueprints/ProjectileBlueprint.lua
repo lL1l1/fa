@@ -138,6 +138,10 @@
 ---@field RealisticOrdinance boolean
 --- bombs that always drop stright down
 ---@field StraightDownOrdinance boolean
+--- how many sub-projectiles the projectile spawns
+---@field Fragments number
+--- Sub-projectile blueprint path
+---@field FragmentId FileName
 --- for projectiles that spawn spreads of sub-projectiles, how large the impact radius should be
 ---@field FragmentRadius number
 ---@field OnLostTargetLifetime? number
