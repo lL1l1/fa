@@ -47,7 +47,7 @@ AANTorpedoCluster01 = ClassProjectile(ATorpedoCluster) {
         -- create child projectiles
         local bp = self.Blueprint.Physics
         local numProjectiles = bp.Fragments
-        for i = 0, numProjectiles do
+        for i = 0, numProjectiles - 1 do
             proj = self:CreateChildProjectile(bp.FragmentId)
             proj.DamageData = self.DamageData
         end
