@@ -966,6 +966,7 @@ DefaultProjectileWeapon = ClassWeapon(Weapon) {
             end
         end,
 
+        ---@param self DefaultProjectileWeapon
         Main = function(self)
             local unit = self.unit
             unit:SetBusy(true)
@@ -980,6 +981,13 @@ DefaultProjectileWeapon = ClassWeapon(Weapon) {
             local salvoSize = bp.MuzzleSalvoSize
             local notExclusive = bp.NotExclusive
             local rackBones = bp.RackBones
+
+            local t = self:GetCurrentTarget()
+            if t and (t.Layer == "Sub" or t.GetSource and t:GetSource().Layer == "Sub") then
+                local targetPos = self:GetCurrentTargetPos()
+                local surfacePos = Vector(targetPos[1], GetSurfaceHeight(targetPos[1], targetPos[3]), targetPos[3])
+                self:SetTargetGround(surfacePos)
+            end
 
             local numRackFiring = self.CurrentRackSalvoNumber
             --This is done to make sure that when racks should fire together, they do
