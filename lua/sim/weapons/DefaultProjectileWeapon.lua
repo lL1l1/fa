@@ -983,9 +983,19 @@ DefaultProjectileWeapon = ClassWeapon(Weapon) {
             local rackBones = bp.RackBones
 
             local t = self:GetCurrentTarget()
-            if t and (t.Layer == "Sub" or t.GetSource and t:GetSource().Layer == "Sub") then
+            t = t.GetSource and t:GetSource() or t
+            if t and t.Layer == "Sub" then
                 local targetPos = self:GetCurrentTargetPos()
-                local surfacePos = Vector(targetPos[1], GetSurfaceHeight(targetPos[1], targetPos[3]), targetPos[3])
+                local vx, _, vz = t:GetVelocity()
+                local dt =  VDist3(targetPos, self.unit:GetPosition())/self.Blueprint.MuzzleVelocity * 10
+                local x = targetPos[1]
+                local z = targetPos[3]
+                local surfacePos = Vector(
+                    x + vx * dt
+                    , GetSurfaceHeight(x, z)
+                    , z + vz * dt
+                )
+                DrawCircle(surfacePos, 1, 'ffffff')
                 self:SetTargetGround(surfacePos)
             end
 
