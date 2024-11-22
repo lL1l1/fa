@@ -24,6 +24,8 @@ local EntityCategoryContains = EntityCategoryContains
 local categoriesAIR = categories.AIR
 local categoriesENGINEER = categories.ENGINEER
 
+local lastLogTick = -1
+
 ---@class FactoryUnit : StructureUnit
 ---@field BuildingUnit boolean
 ---@field BuildEffectsBag TrashBag
@@ -127,6 +129,12 @@ FactoryUnit = ClassUnit(StructureUnit) {
     ---@param unitBeingBuilt Unit
     ---@param order string
     OnStopBuild = function(self, unitBeingBuilt, order)
+        local tick = GetGameTick()
+        if tick ~= lastLogTick then
+            LOG("stopped building", tick)
+            lastLogTick = tick
+        end
+
         StructureUnitOnStopBuild(self, unitBeingBuilt, order)
 
         self.BuildingUnit = false
