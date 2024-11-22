@@ -995,7 +995,6 @@ DefaultProjectileWeapon = ClassWeapon(Weapon) {
                     , GetSurfaceHeight(x, z)
                     , z + vz * dt
                 )
-                DrawCircle(surfacePos, 1, 'ffffff')
                 self:SetTargetGround(surfacePos)
             end
 
