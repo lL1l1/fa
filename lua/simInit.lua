@@ -81,7 +81,9 @@ end
 --SetupSession will be called by the engine after ScenarioInfo is set
 --but before any armies are created.
 function SetupSession()
-
+    SimConExecute('sim_ChecksumPeriod 1')
+    SimConExecute('net_SendDelay 0')
+    SimConExecute('net_Lag 0')
     import("/lua/ai/gridreclaim.lua").Setup()
 
     ScenarioInfo.TriggerManager = import("/lua/triggermanager.lua").Manager
