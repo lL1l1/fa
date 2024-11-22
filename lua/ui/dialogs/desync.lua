@@ -14,8 +14,15 @@ local TextArea = import("/lua/ui/controls/textarea.lua").TextArea
 
 local dialog = false
 local doesntCare = false
+local inPausing = false
 
 function UpdateDialog(beatNumber, strings)
+    if SessionIsPaused() then
+        inPausing = false
+    elseif not inPausing then
+        SessionRequestPause()
+        inPausing = true
+    end
     WARN("Desync at beat " .. beatNumber .. " tick " .. GetGameTimeSeconds())
     if doesntCare or dialog then
         return
