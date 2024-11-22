@@ -982,11 +982,11 @@ DefaultProjectileWeapon = ClassWeapon(Weapon) {
             local notExclusive = bp.NotExclusive
             local rackBones = bp.RackBones
 
-            local t = self:GetCurrentTarget()
-            t = t.GetSource and t:GetSource() or t
-            if t and t.Layer == "Sub" then
+            local target = self:GetCurrentTarget()
+            target = target.GetSource and target:GetSource() or target
+            if target and target.Layer == "Sub" then
                 local targetPos = self:GetCurrentTargetPos()
-                local vx, _, vz = t:GetVelocity()
+                local vx, _, vz = target:GetVelocity()
                 local dt =  VDist3(targetPos, self.unit:GetPosition())/self.Blueprint.MuzzleVelocity * 10
                 local x = targetPos[1]
                 local z = targetPos[3]
