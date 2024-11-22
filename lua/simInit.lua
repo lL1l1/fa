@@ -323,7 +323,7 @@ function BeginSession()
     end
 
     -- keep track of user name for LOCs
-    local focusarmy = GetFocusArmy()
+    local focusarmy = 1
     if focusarmy>=0 and ArmyBrains[focusarmy] then
         LocGlobals.PlayerName = ArmyBrains[focusarmy].Nickname
     end

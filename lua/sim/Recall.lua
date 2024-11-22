@@ -431,6 +431,7 @@ end
 
 ---@param reason CannotRecallReason
 function SyncCannotRequestRecall(reason)
+    LOG("Reason:", GetGameTick(), reason)
     GetRecallSyncTable().CannotRequest = reason
 end
 
@@ -483,6 +484,7 @@ local function SyncRecallStatusThread()
 end
 
 function SyncRecallStatus()
+    LOG('SyncRecallStatus', GetGameTick())
     if UserRecallStatusThread then
         ResumeThread(UserRecallStatusThread) -- force update the existing thread
     else

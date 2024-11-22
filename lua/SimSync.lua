@@ -122,17 +122,17 @@ function OnPostLoad()
 end
 
 function NoteFocusArmyChanged(new, old)
-    import("/lua/simping.lua").OnArmyChange()
-    import("/lua/sim/recall.lua").OnArmyChange()
-    for entityID, data in UnitData do
-        if new == -1 or data.OwnerArmy == new then
-            Sync.UnitData[entityID] = data.Data
-        elseif old == -1 or data.OwnerArmy == old then
-            Sync.ReleaseIds[entityID] = true
-        end
-    end
-    SyncUnitEnhancements()
-    Sync.FocusArmyChanged = {new = new, old = old}
+    -- import("/lua/simping.lua").OnArmyChange()
+    -- import("/lua/sim/recall.lua").OnArmyChange()
+    -- for entityID, data in UnitData do
+    --     if new == -1 or data.OwnerArmy == new then
+    --         Sync.UnitData[entityID] = data.Data
+    --     elseif old == -1 or data.OwnerArmy == old then
+    --         Sync.ReleaseIds[entityID] = true
+    --     end
+    -- end
+    -- SyncUnitEnhancements()
+    -- Sync.FocusArmyChanged = {new = new, old = old}
 end
 
 function FloatingEntityText(entityId, text)

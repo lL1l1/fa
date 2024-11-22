@@ -280,35 +280,35 @@ local function ScoreThread()
             end
         end
 
-        local myArmyIndex = GetFocusArmy()
-        scoreData.focusArmyIndex = myArmyIndex -- Can't get the active player during score screen so we save it here.
-        local observer = myArmyIndex == -1
+        -- local myArmyIndex = GetFocusArmy()
+        -- scoreData.focusArmyIndex = myArmyIndex -- Can't get the active player during score screen so we save it here.
+        -- local observer = myArmyIndex == -1
 
-        Sync.Score = { }
-        if observer or SessionIsReplay() then
-            Sync.Score = ArmyScore
-        else
-            for index, brain in ArmyBrains do
-                if ArmyIsCivilian(index) then
-                    continue
-                end
-                if brain:IsDefeated() then
-                    Sync.Score[index] = {Defeated = true, general = {}}
-                else
-                    if (myArmyIndex == index) or (alliesScore and IsAlly(myArmyIndex, index)) then
-                        Sync.Score[index] = table.deepcopy(ArmyScore[index])
-                    else
-                        Sync.Score[index] = {general = {}}
-                    end
-                end
+        -- Sync.Score = { }
+        -- if observer or SessionIsReplay() then
+        --     Sync.Score = ArmyScore
+        -- else
+        --     for index, brain in ArmyBrains do
+        --         if ArmyIsCivilian(index) then
+        --             continue
+        --         end
+        --         if brain:IsDefeated() then
+        --             Sync.Score[index] = {Defeated = true, general = {}}
+        --         else
+        --             if (myArmyIndex == index) or (alliesScore and IsAlly(myArmyIndex, index)) then
+        --                 Sync.Score[index] = table.deepcopy(ArmyScore[index])
+        --             else
+        --                 Sync.Score[index] = {general = {}}
+        --             end
+        --         end
 
-                if scoreOption ~= 'no' then
-                    Sync.Score[index].general.score = ArmyScore[index].general.score
-                else
-                    Sync.Score[index].general.score = -1
-                end
-            end
-        end
+        --         if scoreOption ~= 'no' then
+        --             Sync.Score[index].general.score = ArmyScore[index].general.score
+        --         else
+        --             Sync.Score[index].general.score = -1
+        --         end
+        --     end
+        -- end
     end
 end
 

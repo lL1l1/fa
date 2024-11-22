@@ -218,24 +218,24 @@ EnergyManagerBrainComponent = ClassSimple {
                 end
             end
 
-            if self.Army == GetFocusArmy() then
-                syncTable.on = TableSize(EnergyExcessUnitsEnabled)
-                syncTable.off = TableSize(EnergyExcessUnitsDisabled)
-                syncTable.totalEnergyConsumed = self.EnergyExcessConsumed
-                syncTable.totalEnergyRequired = self.EnergyExcessRequired
-                syncTable.totalMassProduced = self.EnergyExcessConverted
-                -- only send new data
-                if lastSyncTable.on ~= syncTable.on
-                    or lastSyncTable.off ~= syncTable.off
-                    or lastSyncTable.totalEnergyConsumed ~= syncTable.totalEnergyConsumed
-                    or lastSyncTable.totalEnergyRequired ~= syncTable.totalEnergyRequired
-                    or lastSyncTable.totalMassProduced ~= syncTable.totalMassProduced
-                then
-                    Sync.MassFabs = syncTable
-                    -- swap the data buffers
-                    syncTable, lastSyncTable = lastSyncTable, syncTable
-                end
-            end
+            -- if self.Army == GetFocusArmy() then
+            --     syncTable.on = TableSize(EnergyExcessUnitsEnabled)
+            --     syncTable.off = TableSize(EnergyExcessUnitsDisabled)
+            --     syncTable.totalEnergyConsumed = self.EnergyExcessConsumed
+            --     syncTable.totalEnergyRequired = self.EnergyExcessRequired
+            --     syncTable.totalMassProduced = self.EnergyExcessConverted
+            --     -- only send new data
+            --     if lastSyncTable.on ~= syncTable.on
+            --         or lastSyncTable.off ~= syncTable.off
+            --         or lastSyncTable.totalEnergyConsumed ~= syncTable.totalEnergyConsumed
+            --         or lastSyncTable.totalEnergyRequired ~= syncTable.totalEnergyRequired
+            --         or lastSyncTable.totalMassProduced ~= syncTable.totalMassProduced
+            --     then
+            --         Sync.MassFabs = syncTable
+            --         -- swap the data buffers
+            --         syncTable, lastSyncTable = lastSyncTable, syncTable
+            --     end
+            -- end
             CoroutineYield(1)
         end
     end,

@@ -4888,48 +4888,48 @@ Unit = ClassUnit(moho.unit_methods, IntelComponent, VeterancyComponent, DebugUni
     ---@param trigger any
     ---@param source any
     SendNotifyMessage = function(self, trigger, source)
-        local focusArmy = GetFocusArmy()
-        if focusArmy == -1 or focusArmy == self.Army then
-            local id
-            local unitType
-            local category
+        -- local focusArmy = GetFocusArmy()
+        -- if focusArmy == -1 or focusArmy == self.Army then
+        --     local id
+        --     local unitType
+        --     local category
 
-            if not source then
-                local bp = self.Blueprint
-                if bp.CategoriesHash.RESEARCH then
-                    unitType = string.lower('research' .. self.Blueprint.LayerCategory .. self.Blueprint.TechCategory)
-                    category = 'tech'
-                elseif EntityCategoryContains(categories.NUKE * categories.STRUCTURE - categories.EXPERIMENTAL, self) then -- Ensure to exclude Yolona Oss, which gets its own message
-                    unitType = 'nuke'
-                    category = 'other'
-                elseif EntityCategoryContains(categories.TECH3 * categories.STRUCTURE * categories.ARTILLERY, self) then
-                    unitType = 'arty'
-                    category = 'other'
-                elseif self.Blueprint.TechCategory == 'EXPERIMENTAL' then
-                    unitType = bp.BlueprintId
-                    category = 'experimentals'
-                else
-                    return
-                end
-            else -- We are being called from the Enhancements chain (ACUs)
-                id = self.EntityId
-                category = string.lower(self.Blueprint.FactionCategory)
-            end
+        --     if not source then
+        --         local bp = self.Blueprint
+        --         if bp.CategoriesHash.RESEARCH then
+        --             unitType = string.lower('research' .. self.Blueprint.LayerCategory .. self.Blueprint.TechCategory)
+        --             category = 'tech'
+        --         elseif EntityCategoryContains(categories.NUKE * categories.STRUCTURE - categories.EXPERIMENTAL, self) then -- Ensure to exclude Yolona Oss, which gets its own message
+        --             unitType = 'nuke'
+        --             category = 'other'
+        --         elseif EntityCategoryContains(categories.TECH3 * categories.STRUCTURE * categories.ARTILLERY, self) then
+        --             unitType = 'arty'
+        --             category = 'other'
+        --         elseif self.Blueprint.TechCategory == 'EXPERIMENTAL' then
+        --             unitType = bp.BlueprintId
+        --             category = 'experimentals'
+        --         else
+        --             return
+        --         end
+        --     else -- We are being called from the Enhancements chain (ACUs)
+        --         id = self.EntityId
+        --         category = string.lower(self.Blueprint.FactionCategory)
+        --     end
 
-            if trigger == 'transferred' then
-                if not Sync.EnhanceMessage then return end
-                for index, msg in Sync.EnhanceMessage do
-                    if msg.source == (source or unitType) and msg.trigger == 'completed' and msg.category == category and msg.id == id then
-                        table.remove(Sync.EnhanceMessage, index)
-                        break
-                    end
-                end
-            else
-                if not Sync.EnhanceMessage then Sync.EnhanceMessage = {} end
-                local message = {source = source or unitType, trigger = trigger, category = category, id = id, army = self.Army}
-                table.insert(Sync.EnhanceMessage, message)
-            end
-        end
+        --     if trigger == 'transferred' then
+        --         if not Sync.EnhanceMessage then return end
+        --         for index, msg in Sync.EnhanceMessage do
+        --             if msg.source == (source or unitType) and msg.trigger == 'completed' and msg.category == category and msg.id == id then
+        --                 table.remove(Sync.EnhanceMessage, index)
+        --                 break
+        --             end
+        --         end
+        --     else
+        --         if not Sync.EnhanceMessage then Sync.EnhanceMessage = {} end
+        --         local message = {source = source or unitType, trigger = trigger, category = category, id = id, army = self.Army}
+        --         table.insert(Sync.EnhanceMessage, message)
+        --     end
+        -- end
     end,
 
     ---@param self Unit
