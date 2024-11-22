@@ -16,6 +16,7 @@ local dialog = false
 local doesntCare = false
 
 function UpdateDialog(beatNumber, strings)
+    SessionRequestPause()
     WARN("Desync at beat " .. beatNumber .. " tick " .. GetGameTimeSeconds())
     if doesntCare or dialog then
         return
