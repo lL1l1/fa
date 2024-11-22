@@ -96,6 +96,24 @@ do
 end
 
 do
+    local oldGetFocusArmy = _G.GetFocusArmy
+    _G.GetFocusArmy = function ()
+        local t = GetGameTick()
+        -- if t > 3700 then
+        LOG(("tick %05d: GetFocusArmy"):format(t), debug.traceback())
+        -- end
+        return oldGetFocusArmy()
+    end
+
+    local oldSysTime = GetSystemTimeSecondsOnlyForProfileUse
+    _G.GetSystemTimeSecondsOnlyForProfileUse = function()
+        local t = GetGameTick()
+        LOG(("tick %05d: SysTime"):format(t), debug.traceback())
+        return oldSysTime()
+    end
+end
+
+do
     -- implementation of https://github.com/FAForever/FA-Binary-Patches/pull/29
     local oldIssueBuildMobile = _G.IssueBuildMobile
     _G.IssueBuildMobile = function(units, position, blueprintID, table)
