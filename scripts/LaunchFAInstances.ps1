@@ -33,7 +33,7 @@ $hostPlayerName = "HostPlayer_1"
 $gameName = "MyGame"
 
 # Array of factions to choose from
-$factions = @("UEF", "Seraphim", "Cybran", "Aeon")
+$factions = @("UEF")
 
 # Get the screen resolution (for placing and resizing the windows)
 Add-Type -AssemblyName System.Windows.Forms
