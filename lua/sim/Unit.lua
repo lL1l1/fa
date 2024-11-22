@@ -44,7 +44,7 @@ local DefaultTerrainType = GetTerrainType(-1, -1)
 
 local GetNearestPlayablePoint = import("/lua/scenarioframework.lua").GetNearestPlayablePoint
 
-
+local lastLogTickOnCreate = -1
 
 --- Structures that are reused for performance reasons
 --- Maps unit.techCategory to a number so we can do math on it for naval units
@@ -245,6 +245,11 @@ Unit = ClassUnit(moho.unit_methods, IntelComponent, VeterancyComponent, DebugUni
 
     ---@param self Unit
     OnCreate = function(self)
+        local t = GetGameTick()
+        if t ~= lastLogTickOnCreate then
+            LOG("Unit.Oncreate", t)
+            lastLogTickOnCreate = t
+        end
         local bp = self:GetBlueprint()
 
         -- cache often accessed values into inner table
