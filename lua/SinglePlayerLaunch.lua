@@ -257,21 +257,23 @@ local function SetupCommandLineSkirmish(scenario, isPerfTest)
 
     local numColors = table.getn(import("/lua/gamecolors.lua").GameColors.PlayerColors)
 
-    for index, name in armies do
-        sessionInfo.teamInfo[index] = import("/lua/ui/lobby/lobbycomm.lua").GetDefaultPlayerOptions(sessionInfo.playerName)
-        if index == 1 then
-            sessionInfo.teamInfo[index].PlayerName = sessionInfo.playerName
-            sessionInfo.teamInfo[index].Faction = faction
-            sessionInfo.teamInfo[index].Human = true
-        else
-            sessionInfo.teamInfo[index].AIPersonality = 'rush'
-            sessionInfo.teamInfo[index].Faction = GetRandomFaction()
-            sessionInfo.teamInfo[index].PlayerName = GetRandomName(sessionInfo.teamInfo[index].Faction, sessionInfo.teamInfo[index].AIPersonality)
-            sessionInfo.teamInfo[index].Human = false
+    do
+        local armyTable = import("/lua/ui/lobby/lobbycomm.lua").GetDefaultPlayerOptions(sessionInfo.playerName)
+        sessionInfo.teamInfo[1] = table.deepcopy(armyTable)
+        sessionInfo.teamInfo[1].Faction = faction
+        sessionInfo.teamInfo[1].ArmyName = armies[1]
+
+        if not HasCommandLineArg("/noAI") then
+            for index = 2, table.getn(armies) do
+                sessionInfo.teamInfo[index].AIPersonality = 'rush'
+                sessionInfo.teamInfo[index].Faction = GetRandomFaction()
+                sessionInfo.teamInfo[index].PlayerName = GetRandomName(sessionInfo.teamInfo[index].Faction, sessionInfo.teamInfo[index].AIPersonality)
+                sessionInfo.teamInfo[index].Human = false
+                sessionInfo.teamInfo[index].ArmyName = armies[index]
+                sessionInfo.teamInfo[index].PlayerColor = math.mod(index, numColors)
+                sessionInfo.teamInfo[index].ArmyColor = math.mod(index, numColors)
+            end
         end
-        sessionInfo.teamInfo[index].ArmyName = name
-        sessionInfo.teamInfo[index].PlayerColor = math.mod(index, numColors)
-        sessionInfo.teamInfo[index].ArmyColor = math.mod(index, numColors)
     end
 
     local extras = MapUtils.GetExtraArmies(sessionInfo.scenarioInfo)
@@ -287,6 +289,8 @@ local function SetupCommandLineSkirmish(scenario, isPerfTest)
     end
 
     Prefs.SetToCurrentProfile('LoadingFaction', faction)
+
+    sessionInfo.GameOptions = { CheatsEnabled = true, GameSpeed = 'adjustable' }
 
     return sessionInfo
 end
