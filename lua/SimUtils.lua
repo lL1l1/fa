@@ -509,7 +509,7 @@ end
 ---@param army Army
 function TryRebuildUnits(trackers, army)
     local rebuilders = {}
-    for k, tracker in ipairs(trackers) do
+    for k, tracker in trackers do
         if tracker.Success then
             continue
         end
@@ -531,7 +531,7 @@ function TryRebuildUnits(trackers, army)
 
     WaitTicks(1)
 
-    for k, rebuilder in ipairs(rebuilders) do
+    for k, rebuilder in rebuilders do
         local tracker = trackers[k]
         local newUnit = rebuilder:GetFocusUnit()
         local progressDif = rebuilder:GetWorkProgress() - tracker.UnitProgress
