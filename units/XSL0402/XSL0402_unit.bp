@@ -143,6 +143,7 @@ UnitBlueprint{
         {
             AboveWaterTargetsOnly = true,
             AimsStraightOnDisable = true,
+            AlwaysRecheckTarget = false,
             Audio = {
                 Fire = Sound { Bank = 'XSL_Weapon', Cue = 'XSL0402_Attack_Zap', LodCutoff = 'Weapon_LodCutoff' },
             },
