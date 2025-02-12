@@ -42,14 +42,14 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
     KillingState = State {
         ---@param self SEnergyBallUnit_KillingState
         LifeThread = function(self)
-            WaitSeconds(self:GetBlueprint().Lifetime)
+            WaitSeconds(self.Blueprint.Lifetime)
             ChangeState(self, self.DeathState)
         end,
 
         ---@param self SEnergyBallUnit_KillingState
         Main = function(self)
-            local bp = self:GetBlueprint()
-            local aiBrain = self:GetAIBrain()
+            local bp = self.Blueprint
+            local aiBrain = self.Brain
 
             -- Queue up random moves
             local x, y, z = unpack(self:GetPosition())
@@ -62,7 +62,7 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
             local weaponMinRange = bp.Weapon[1].MinRadius or 0
             local beamLifetime = bp.Weapon[1].BeamLifetime or 1
             local reaquireTime = bp.Weapon[1].RequireTime or 0.5
-            local weapon = self:GetWeapon(1) --[[@as DefaultBeamWeapon]]
+            local weapon = self.WeaponInstances[1] --[[@as DefaultBeamWeapon]]
 
             self:ForkThread(self.LifeThread)
 
@@ -71,7 +71,7 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
                 local targets = aiBrain:GetUnitsAroundPoint(categories.LAND - categories.UNTARGETABLE, location, weaponMaxRange)
 
                 local filteredUnits = {}
-                for k, v in targets do
+                for _, v in targets do
                     if VDist3(location, v:GetPosition()) >= weaponMinRange and v ~= self then
                         table.insert(filteredUnits, v)
                     end
@@ -98,7 +98,7 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
         --- Unused.
         ---@param self SEnergyBallUnit_KillingState
         ComputeWaitTime = function(self)
-            local timeLeft = self:GetBlueprint().Lifetime - self.timeAlive
+            local timeLeft = self.Blueprint.Lifetime - self.timeAlive
 
             local maxWait = 75
             if timeLeft < 7.5 and timeLeft > 2.5 then
