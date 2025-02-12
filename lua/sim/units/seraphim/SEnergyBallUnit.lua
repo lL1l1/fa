@@ -22,6 +22,7 @@
 
 -- upvalue for performance
 local ChangeState = ChangeState
+local GetSurfaceHeight = GetSurfaceHeight
 local IssueToUnitMove = IssueToUnitMove
 local Random = Random
 local VDist3 = VDist3
@@ -102,7 +103,8 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
                 if target then
                     weapon:SetTargetEntity(target)
                 else
-                    reusedTable[1], reusedTable[2], reusedTable[3] = location[1] + Random(-20, 20), location[2], location[3] + Random(-20, 20)
+                    local x, z = location[1] + Random(-20, 20), location[3] + Random(-20, 20)
+                    reusedTable[1], reusedTable[2], reusedTable[3] = x, GetSurfaceHeight(x, z), z
                     weapon:SetTargetGround(reusedTable)
                 end
                 -- Wait a tick to let the target update awesomely.
