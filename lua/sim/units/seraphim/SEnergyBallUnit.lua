@@ -64,10 +64,17 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
             local bp = self.Blueprint
             local aiBrain = self.Brain
 
+            local reusedTable = {}
+
             -- Queue up random moves
             local x, y, z = EntityGetPositionXYZ(self)
-            for i = 1, 100 do
-                IssueToUnitMove(self, { x + Random(-bp.MaxMoveRange, bp.MaxMoveRange), y, z + Random(-bp.MaxMoveRange, bp.MaxMoveRange) })
+            local maxMoveRange = bp.MaxMoveRange
+            if maxMoveRange and maxMoveRange > 0 then
+                reusedTable[2] = y
+                for i = 1, 100 do
+                    reusedTable[1], reusedTable[3] = x + Random(-maxMoveRange, maxMoveRange), z + Random(-maxMoveRange, maxMoveRange)
+                    IssueToUnitMove(self, reusedTable)
+                end
             end
 
             -- Weapon information
@@ -85,7 +92,8 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
 
                 local filteredUnits = {}
                 for _, v in targets do
-                    if VDist3(location, EntityGetPosition(v)) >= weaponMinRange and v ~= self then
+                    reusedTable[1], reusedTable[2], reusedTable[3] = EntityGetPositionXYZ(v)
+                    if VDist3(location, reusedTable) >= weaponMinRange and v ~= self then
                         TableInsert(filteredUnits, v)
                     end
                 end
@@ -94,7 +102,8 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
                 if target then
                     weapon:SetTargetEntity(target)
                 else
-                    weapon:SetTargetGround({ location[1] + Random(-20, 20), location[2], location[3] + Random(-20, 20) })
+                    reusedTable[1], reusedTable[2], reusedTable[3] = location[1] + Random(-20, 20), location[2], location[3] + Random(-20, 20)
+                    weapon:SetTargetGround(reusedTable)
                 end
                 -- Wait a tick to let the target update awesomely.
                 WaitTicks(2)
