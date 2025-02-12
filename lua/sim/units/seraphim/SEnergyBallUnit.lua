@@ -20,6 +20,19 @@
 --** SOFTWARE.
 --**********************************************************************************
 
+-- upvalue for performance
+local ChangeState = ChangeState
+local IssueToUnitMove = IssueToUnitMove
+local Random = Random
+local VDist3 = VDist3
+local WaitSeconds = WaitSeconds
+
+local TableInsert = table.insert
+
+local EntityGetPosition = moho.entity_methods.GetPosition
+local EntityGetPositionXYZ = moho.entity_methods.GetPositionXYZ
+
+
 local SHoverLandUnit = import('/lua/seraphimunits.lua').SHoverLandUnit
 local DefaultBeamWeapon = import('/lua/sim/DefaultWeapons.lua').DefaultBeamWeapon
 
@@ -52,7 +65,7 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
             local aiBrain = self.Brain
 
             -- Queue up random moves
-            local x, y, z = unpack(self:GetPosition())
+            local x, y, z = EntityGetPositionXYZ(self)
             for i = 1, 100 do
                 IssueToUnitMove(self, { x + Random(-bp.MaxMoveRange, bp.MaxMoveRange), y, z + Random(-bp.MaxMoveRange, bp.MaxMoveRange) })
             end
@@ -67,13 +80,13 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
             self:ForkThread(self.LifeThread)
 
             while true do
-                local location = self:GetPosition()
+                local location = EntityGetPosition(self)
                 local targets = aiBrain:GetUnitsAroundPoint(categories.LAND - categories.UNTARGETABLE, location, weaponMaxRange)
 
                 local filteredUnits = {}
                 for _, v in targets do
-                    if VDist3(location, v:GetPosition()) >= weaponMinRange and v ~= self then
-                        table.insert(filteredUnits, v)
+                    if VDist3(location, EntityGetPosition(v)) >= weaponMinRange and v ~= self then
+                        TableInsert(filteredUnits, v)
                     end
                 end
 
