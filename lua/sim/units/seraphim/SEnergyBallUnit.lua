@@ -48,9 +48,9 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
             local aiBrain = self:GetAIBrain()
 
             -- Queue up random moves
-            local x, y,z = unpack(self:GetPosition())
+            local x, y, z = unpack(self:GetPosition())
             for i = 1, 100 do
-                IssueToUnitMove(self, {x + Random(-bp.MaxMoveRange, bp.MaxMoveRange), y, z + Random(-bp.MaxMoveRange, bp.MaxMoveRange)})
+                IssueToUnitMove(self, { x + Random(-bp.MaxMoveRange, bp.MaxMoveRange), y, z + Random(-bp.MaxMoveRange, bp.MaxMoveRange) })
             end
 
             -- Weapon information
@@ -77,7 +77,7 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
                 if target then
                     weapon:SetTargetEntity(target)
                 else
-                    weapon:SetTargetGround({location[1] + Random(-20, 20), location[2], location[3] + Random(-20, 20)})
+                    weapon:SetTargetGround({ location[1] + Random(-20, 20), location[2], location[3] + Random(-20, 20) })
                 end
                 -- Wait a tick to let the target update awesomely.
                 WaitTicks(2)
