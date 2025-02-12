@@ -28,6 +28,9 @@ local Random = Random
 local VDist3 = VDist3
 local WaitSeconds = WaitSeconds
 
+local MathCos = math.cos
+local MathSin = math.sin
+local MathSqrt = math.sqrt
 local TableInsert = table.insert
 
 local EntityGetPosition = moho.entity_methods.GetPosition
@@ -81,6 +84,8 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
             -- Weapon information
             local weaponMaxRange = bp.Weapon[1].MaxRadius
             local weaponMinRange = bp.Weapon[1].MinRadius or 0
+            local weaponMaxRangeSq = weaponMaxRange * weaponMaxRange
+            local weaponMinRangeSq = weaponMinRange * weaponMinRange
             local beamLifetime = bp.Weapon[1].BeamLifetime or 1
             local reaquireTime = bp.Weapon[1].RequireTime or 0.5
             local weapon = self.WeaponInstances[1] --[[@as DefaultBeamWeapon]]
@@ -103,7 +108,13 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
                 if target then
                     weapon:SetTargetEntity(target)
                 else
-                    local x, z = location[1] + Random(-20, 20), location[3] + Random(-20, 20)
+                    -- Pick a random point within min/max range
+                    -- https://codetrip.weebly.com/blog/generating-random-points-in-a-ring
+
+                    local angle = Random() * 6.2831854820251 -- 2*pi
+                    local r = Random()
+                    local dist = MathSqrt((weaponMaxRangeSq - weaponMinRangeSq) * r + weaponMinRangeSq)
+                    local x, z = location[1] + dist * MathCos(angle), location[3] + dist * MathSin(angle)
                     reusedTable[1], reusedTable[2], reusedTable[3] = x, GetSurfaceHeight(x, z), z
                     weapon:SetTargetGround(reusedTable)
                 end
