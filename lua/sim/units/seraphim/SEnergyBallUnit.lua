@@ -28,6 +28,7 @@ local DefaultBeamWeapon = import('/lua/sim/DefaultWeapons.lua').DefaultBeamWeapo
 SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
     timeAlive = 0,
 
+    ---@param self SEnergyBallUnit
     OnCreate = function(self)
         SHoverLandUnit.OnCreate(self)
         self:SetUnSelectable(true)
@@ -37,12 +38,15 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
         ChangeState(self, self.KillingState)
     end,
 
+    ---@class SEnergyBallUnit_KillingState : SEnergyBallUnit, State
     KillingState = State {
+        ---@param self SEnergyBallUnit_KillingState
         LifeThread = function(self)
             WaitSeconds(self:GetBlueprint().Lifetime)
             ChangeState(self, self.DeathState)
         end,
 
+        ---@param self SEnergyBallUnit_KillingState
         Main = function(self)
             local bp = self:GetBlueprint()
             local aiBrain = self:GetAIBrain()
@@ -58,7 +62,7 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
             local weaponMinRange = bp.Weapon[1].MinRadius or 0
             local beamLifetime = bp.Weapon[1].BeamLifetime or 1
             local reaquireTime = bp.Weapon[1].RequireTime or 0.5
-            local weapon = self:GetWeapon(1)
+            local weapon = self:GetWeapon(1) --[[@as DefaultBeamWeapon]]
 
             self:ForkThread(self.LifeThread)
 
@@ -91,6 +95,8 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
             end
         end,
 
+        --- Unused.
+        ---@param self SEnergyBallUnit_KillingState
         ComputeWaitTime = function(self)
             local timeLeft = self:GetBlueprint().Lifetime - self.timeAlive
 
@@ -108,7 +114,9 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
         end,
     },
 
+    ---@class SEnergyBallUnit_DeathState : SEnergyBallUnit, State
     DeathState = State {
+        ---@param self SEnergyBallUnit_DeathState
         Main = function(self)
             self.CanBeKilled = true
             if self.Layer == 'Water' then

@@ -430,6 +430,7 @@ end
 function CAiBrain:GetUnitBlueprint(bpName)
 end
 
+---@overload fun(CAiBrain: moho.aibrain_methods, category: EntityCategory, position: Vector, radius: number): Unit[]
 --- Returns the units around a position that match the categories.
 ---
 --- This function takes into account intel.
