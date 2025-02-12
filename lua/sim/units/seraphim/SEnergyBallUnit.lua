@@ -98,8 +98,9 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
 
                 local filteredUnits = {}
                 for _, v in targets do
+                    if v == self then continue end
                     reusedTable[1], reusedTable[2], reusedTable[3] = EntityGetPositionXYZ(v)
-                    if VDist3(location, reusedTable) >= weaponMinRange and v ~= self then
+                    if VDist3(location, reusedTable) >= weaponMinRange then
                         TableInsert(filteredUnits, v)
                     end
                 end
