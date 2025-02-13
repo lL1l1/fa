@@ -19,13 +19,14 @@
 
 -- That is what happens when we first add and then use the value, instead of using 
 -- the value and then adding to it.
+local loops = 100000
 
 function AddInsertGlobal()
 
     local start = GetSystemTimeSecondsOnlyForProfileUse()
 
     local a = { }
-    for k = 1, 100000 do
+    for k = 1, loops do
         table.insert(a, k)
     end
 
@@ -43,7 +44,7 @@ function AddInsertLocal()
     local TableInsert = table.insert
 
     local a = { }
-    for k = 1, 100000 do
+    for k = 1, loops do
         TableInsert(a, k)
     end
 
@@ -58,7 +59,7 @@ function AddIndex()
     local start = GetSystemTimeSecondsOnlyForProfileUse()
 
     local a = { }
-    for k = 1, 100000 do
+    for k = 1, loops do
         a[k] = k 
     end
 
@@ -75,7 +76,7 @@ end
 --     local TableGetn = table.getn
 
 --     local a = { }
---     for k = 1, 100000 do
+--     for k = 1, loops do
 --         a[TableGetn(a) + 1] = k
 --     end
 
@@ -92,7 +93,7 @@ end
 --     local TableGetn = table.getn
 
 --     local a = { }
---     for k = 1, 100000 do
+--     for k = 1, loops do
 --         a[table.getn(a) + 1] = k 
 --     end
 
@@ -109,7 +110,7 @@ function AddCount()
     local count = 0
 
     local a = { }
-    for k = 1, 100000 do
+    for k = 1, loops do
         count = count + 1
         a[count] = k 
     end
@@ -127,8 +128,26 @@ function AddCountAlt()
     local count = 1
 
     local a = { }
-    for k = 1, 100000 do
+    for k = 1, loops do
         a[count] = k 
+        count = count + 1
+    end
+
+    local final = GetSystemTimeSecondsOnlyForProfileUse()
+
+    return final - start
+
+end
+
+function AddCountAlt2()
+
+    local start = GetSystemTimeSecondsOnlyForProfileUse()
+
+    local count = 1
+
+    local a = { }
+    for k = 1, loops do
+        a[count + 1] = k 
         count = count + 1
     end
 
