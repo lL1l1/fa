@@ -31,7 +31,7 @@ local WaitSeconds = WaitSeconds
 local MathCos = math.cos
 local MathSin = math.sin
 local MathSqrt = math.sqrt
-local TableInsert = table.insert
+local TableGetn = table.getn
 
 local EntityGetPosition = moho.entity_methods.GetPosition
 local EntityGetPositionXYZ = moho.entity_methods.GetPositionXYZ
@@ -96,16 +96,20 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
                 local location = EntityGetPosition(self)
                 local targets = aiBrain:GetUnitsAroundPoint(categories.LAND - categories.UNTARGETABLE, location, weaponMaxRange)
 
-                local filteredUnits = {}
-                for _, v in targets do
-                    if v == self then continue end
-                    reusedTable[1], reusedTable[2], reusedTable[3] = EntityGetPositionXYZ(v)
-                    if VDist3(location, reusedTable) >= weaponMinRange then
-                        TableInsert(filteredUnits, v)
+                -- filter out units within min range
+                local n = TableGetn(targets)
+                for i = n, 1, -1 do
+                    local target = targets[i]
+                    if target == self then continue end
+                    reusedTable[1], reusedTable[2], reusedTable[3] = EntityGetPositionXYZ(target)
+                    if VDist3(location, reusedTable) < weaponMinRange then
+                        target[i], target[n] = target[n], nil
+                        n = n - 1
                     end
                 end
 
-                local target = table.random(filteredUnits)
+                local target = table.random(targets)
+
                 if target then
                     weapon:SetTargetEntity(target)
                 else
