@@ -2808,7 +2808,7 @@ Unit = ClassUnit(moho.unit_methods, IntelComponent, VeterancyComponent, DebugUni
 
     ---@param self Unit
     ---@param built Unit
-    ---@param order string
+    ---@param order BuildOrderType
     ---@return boolean
     OnStartBuild = function(self, built, order)
         self.BuildEffectsBag = self.BuildEffectsBag or TrashBag()
@@ -2817,7 +2817,8 @@ Unit = ClassUnit(moho.unit_methods, IntelComponent, VeterancyComponent, DebugUni
         local id = built.UnitId
         local bp = built:GetBlueprint()
         local bpSelf = self.Blueprint
-        if not ScenarioInfo.CampaignMode and Game.IsRestricted(id, self.Army) then
+        -- allow repairing restricted units that may be gifted or captured in campaign
+        if order ~= 'Repair' and Game.IsRestricted(id, self.Army) then
             WARN('Unit.OnStartBuild() Army ' ..self.Army.. ' cannot build restricted unit: ' .. (bp.Description or id))
             self:OnFailedToBuild() -- Don't use: self:OnStopBuild()
             IssueClearFactoryCommands({self})
