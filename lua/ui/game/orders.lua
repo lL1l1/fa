@@ -1002,7 +1002,7 @@ end
 
 ---@param button OrderButton
 local function NukeBtnText(button)
-    if not currentSelection[1] or currentSelection[1].Dead then return '' end
+    if not currentSelection[1] or currentSelection[1]:IsDead() then return '' end
     if table.getsize(currentSelection) > 1 then
         button.buttonText:SetColor('fffff600')
         return '?'
@@ -1019,7 +1019,7 @@ end
 
 ---@param button OrderButton
 local function TacticalBtnText(button)
-    if not currentSelection[1] or currentSelection[1].Dead then return '' end
+    if not currentSelection[1] or currentSelection[1]:IsDead() then return '' end
     if table.getsize(currentSelection) > 1 then
         button.buttonText:SetColor('fffff600')
         return '?'
@@ -1119,7 +1119,7 @@ end
 
 function EnterOverchargeMode()
     local unit = currentSelection[1]
-    if not unit or unit.Dead or unit:IsOverchargePaused() then return end
+    if not unit or unit:IsDead() or unit:IsOverchargePaused() then return end
     local bp = unit:GetBlueprint()
     local weapon = FindOCWeapon(unit:GetBlueprint())
     if not weapon then return end
@@ -1134,7 +1134,7 @@ end
 ---@param deltaTime number
 local function OverchargeFrame(self, deltaTime)
     local unit = currentSelection[1]
-    if not unit or unit.Dead then return end
+    if not unit or unit:IsDead() then return end
     local weapon = FindOCWeapon(unit:GetBlueprint())
     if not weapon then
         self:SetNeedsFrameUpdate(false)

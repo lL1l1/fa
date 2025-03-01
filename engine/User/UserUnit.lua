@@ -3,7 +3,6 @@
 ---@class UserUnit: InternalObject
 ---@field ThreadUnpause? thread
 ---@field ThreadUnpauseCandidates? table<EntityId, boolean>
----@field Dead boolean
 local UserUnit = {}
 
 ---@alias UserUnitCommand 
