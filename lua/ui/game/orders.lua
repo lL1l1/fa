@@ -30,7 +30,7 @@ controls = import("/lua/ui/controls.lua").Get()
 ---@field _order string
 ---@field _data table
 ---@field _curHelpText string
----@field _toggleMode integer
+---@field _toggleMode OrderToggleMode
 ---@field _toggleState number|boolean
 ---@field mixedModeIcon Bitmap
 ---@field toggleModeIcon Bitmap
@@ -183,11 +183,17 @@ local function StandardOrderBehavior(self, modifiers)
     end
 end
 
+---@alias OrderToggleMode
+---| 0 # no units found
+---| 1 # all units toggled on
+---| 2 # all units toggled off
+---| 3 # mixed
+
 --TODO: set up these functions so they are abstracted for all orders, so you can check them for anything like OC, diving, production, whatever.
---returns 0 for no units found, 1 for only snipes on, 2 for only snipes off, 3 for mixed.
 ---@param unitList UserUnit[]
----@param variable string
----@param value string
+---@param variable string # Sync'd UnitData key to check in
+---@param value string # Sync'd UnitData value to check for
+---@return OrderToggleMode
 local function IsToggleMode(unitList, variable, value)
 
     local toggleStateTrue
