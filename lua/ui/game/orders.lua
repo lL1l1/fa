@@ -120,7 +120,7 @@ local function CreateAutoBuildEffect(parent)
 end
 
 ---@param parent Control
----@param ID string
+---@param ID string # ID from `lua/ui/help/tooltips.lua`
 function CreateMouseoverDisplay(parent, ID)
     if controls.mouseoverDisplay then
         controls.mouseoverDisplay:Destroy()
