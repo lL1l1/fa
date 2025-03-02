@@ -415,7 +415,7 @@ function StopOrderBehavior(self, modifiers)
     end
 end
 
--- Used by things that build weapons, etc
+-- Used by units that build silo ammo
 ---@param modifiers EventModifiers
 local function BuildOrderBehavior(self, modifiers)
     if modifiers.Left then
@@ -436,6 +436,9 @@ local function BuildOrderBehavior(self, modifiers)
     end
 end
 
+-- Used by units that build silo ammo
+---@param control OrderButton
+---@param unitList UserUnit[]
 local function BuildInitFunction(control, unitList)
     local isAutoMode = GetIsAutoMode(unitList)
     control:SetCheck(isAutoMode)
