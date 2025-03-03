@@ -28,7 +28,7 @@ controls = import("/lua/ui/controls.lua").Get()
 
 ---@class OrderButton : Checkbox, MauiCheckbox
 ---@field _order string
----@field _data table
+---@field _data OrderInfo
 ---@field _curHelpText string
 ---@field _toggleMode OrderToggleMode
 ---@field _toggleState number|boolean
