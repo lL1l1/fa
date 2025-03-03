@@ -126,7 +126,7 @@ end
 function EntityCategoryEmpty(category)
 end
 
----@overload fun(units: UserUnit[]): UserUnit[]
+---@overload fun(category: EntityCategory, units: UserUnit[]): UserUnit[]
 --- filters a list of units to only those found in the category
 ---@param category EntityCategory
 ---@param units Unit[]
