@@ -567,7 +567,6 @@ function ToggleDiveOrder()
 end
 
 -- Pause button specific behvior
--- TODO pause button will be moved to construction manager
 ---@param self OrderButton
 ---@param modifiers EventModifiers
 local function PauseOrderBehavior(self, modifiers)
