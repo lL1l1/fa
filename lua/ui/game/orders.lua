@@ -808,6 +808,8 @@ local function DroneInit(self, selection)
 
 end
 
+---@param self OrderButton
+---@param modifiers EventModifiers
 local function ExternalFactoryBehavior(self, modifiers)
     if modifiers.Left then
         SelectUnits(self._unit)
