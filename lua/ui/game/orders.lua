@@ -42,6 +42,7 @@ controls = import("/lua/ui/controls.lua").Get()
 ---@field buttonText Text
 ---@field _OnFirestateSelection function
 ---@field _toggleIcon Bitmap
+---@field _mixedIcon? Bitmap
 
 -- Positioning controls, don't belong to file
 local layoutVar = false
@@ -692,7 +693,8 @@ end
 
 ---@param self OrderButton
 ---@param modifiers EventModifiers
----@param subState boolean
+---@param subState boolean | number
+---@return boolean?
 local function StatToggleOrderBehavior(self, modifiers, subState)
     local state
     if subState ~= nil then
@@ -1229,6 +1231,7 @@ end
 ---@field onframe? fun(control: Control, delta: number)
 ---@field ButtonTextFunc? fun(button: Button): string
 ---@field extraInfo? any
+---@field statToggle 'AutoDeploy' | string # Which stat from the unit blueprint's StatToggles to set. Used by external factory AutoDeploy.
 
 
 --- Sets up an orderInfo for each order that comes in
