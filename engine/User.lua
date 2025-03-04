@@ -19,6 +19,11 @@
 ---| 1 # Hold fire
 ---| 2 # Ground fire
 
+---@alias FireStateString
+---| "ReturnFire" 
+---| "HoldFire" 
+---| "HoldGround"
+
 ---@alias Keycode
 --- | 'BACK'
 --- | 'TAB'
@@ -1134,7 +1139,7 @@ end
 
 --- Set the specific fire state for the units passed in
 ---@param units UserUnit[]
----@param fireState FireState
+---@param fireState FireState | FireStateString
 function SetFireState(units, fireState)
 end
 

@@ -40,8 +40,9 @@ controls = import("/lua/ui/controls.lua").Get()
 ---@field _unit UserUnit
 ---@field _pod UserUnit[]
 ---@field buttonText Text
----@field _OnFirestateSelection function
----@field _toggleIcon Bitmap
+---@field _OnFirestateSelection? fun(button: OrderButton, newState: integer|boolean, id: FireState)
+---@field _popup? FireStatePopup
+---@field _toggleIcon? Bitmap
 ---@field _mixedIcon? Bitmap
 
 -- Positioning controls, don't belong to file
@@ -816,12 +817,18 @@ local function ExternalFactoryBehavior(self, modifiers)
     end
 end
 
+---@class OrderUIRetaliateStateData
+---@field bitmap "stand-ground" | "return-fire" | "hold-fire" | "stand-ground"
+---@field helpText "mode_mixed" | "mode_return_fire" | "mode_hold_fire" | "mode_hold_ground"
+---@field id? FireStateString
+
 -- Retaliate button specific behvior
+---@type table<-1 | FireState, OrderUIRetaliateStateData>
 local retaliateStateInfo = {
-    [-1] = {bitmap = 'stand-ground',    helpText = "mode_mixed"},
-    [0] = {bitmap = 'return-fire',     helpText = "mode_return_fire", id = 'ReturnFire'},
-    [1] = {bitmap = 'hold-fire',       helpText = "mode_hold_fire", id = 'HoldFire'},
-    [2] = {bitmap = 'stand-ground',    helpText = "mode_hold_ground", id = 'HoldGround'},
+    [-1] = { bitmap = 'stand-ground',   helpText = 'mode_mixed' },
+    [0]  = { bitmap = 'return-fire',    helpText = 'mode_return_fire',  id = 'ReturnFire' },
+    [1]  = { bitmap = 'hold-fire',      helpText = 'mode_hold_fire',    id = 'HoldFire' },
+    [2]  = { bitmap = 'stand-ground',   helpText = 'mode_hold_ground',  id = 'HoldGround' },
 }
 
 ---@param parent Bitmap
@@ -868,17 +875,27 @@ local function CreateBorder(parent)
     return border
 end
 
+---@class FireStatePopup : Bitmap
+---@field buttons table<number, Checkbox>
+
 ---@param parent OrderButton
-local function CreateFirestatePopup(parent, selected)
+---@param toggleState boolean|number
+---@return FireStatePopup
+local function CreateFirestatePopup(parent, toggleState)
     local bg = Bitmap(parent, UIUtil.UIFile('/game/ability_brd/chat_brd_m.dds'))
 
     bg.border = CreateBorder(bg)
     bg:DisableHitTest(true)
-
+    ---@param index integer
+    ---@param info OrderUIRetaliateStateData
+    ---@return MauiCheckbox
     local function CreateButton(index, info)
         local btn = Checkbox(bg, GetOrderBitmapNames(info.bitmap))
         btn.info = info
         btn.index = index
+        ---@param control Checkbox | { info: OrderUIRetaliateStateData, index: integer }
+        ---@param event KeyEvent
+        ---@return boolean
         btn.HandleEvent = function(control, event)
             if event.Type == 'MouseEnter' then
                 CreateMouseoverDisplay(control, control.info.helpText)
@@ -890,6 +907,8 @@ local function CreateFirestatePopup(parent, selected)
             end
             return Checkbox.HandleEvent(control, event)
         end
+        ---@param control Checkbox | { info: OrderUIRetaliateStateData, index: integer }
+        ---@param checked boolean
         btn.OnCheck = function(control, checked)
             parent:_OnFirestateSelection(control.index, control.info.id)
         end
@@ -928,8 +947,8 @@ end
 local function RetaliateOrderBehavior(self, modifiers)
     if not self._OnFirestateSelection then
         ---@param button OrderButton
-        ---@param newState integer|boolean
-        ---@param id FireState
+        ---@param newState integer
+        ---@param id FireStateString
         self._OnFirestateSelection = function(button, newState, id)
             button._toggleState = newState
             SetFireState(currentSelection, id)
