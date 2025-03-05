@@ -149,6 +149,7 @@ local function CreateOrderButtonGrid()
 end
 
 -- Local logic data
+---@type table<CommandCap, OrderButton>
 local orderCheckboxMap = {}
 ---@type UserUnit[]
 local currentSelection = nil
@@ -1343,10 +1344,11 @@ The orderInfo format is:
 Since this is a table, if you need any more information, for instance, the command to be emmited from the OnClick
 you can add it to the table and it will be ignored, so you're safe to put whatever info you need in to it. When the
 OnClick callback is called, self._data will contain this info.
---]]
----@param orderInfo table
+]]
+---@param orderInfo OrderInfo
 ---@param slot integer
 ---@param batchMode boolean
+---@return OrderButton
 local function AddOrder(orderInfo, slot, batchMode)
     batchMode = batchMode or false
 
@@ -1876,7 +1878,7 @@ function CreateControls()
     end
 end
 
----@param layout any
+---@param layout any # Sets the unused local `layoutVar`. `layouts.lua` is imported instead for the layouting of controls.
 function SetLayout(layout)
     layoutVar = layout
 
@@ -1898,7 +1900,8 @@ end
 
 -- Called from gamemain to create control
 ---@param parent Control
----@param mfd Control
+---@param mfd Control # reference to multifunction display
+---@return Bitmap
 function SetupOrdersControl(parent, mfd)
     controls.controlClusterGroup = parent
     controls.mfdControl = mfd
