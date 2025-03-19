@@ -54,6 +54,7 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
         self:SetUnSelectable(true)
         self.CanTakeDamage = false
         self.CanBeKilled = false
+        self.DisallowCollisions = true
         self:PlayUnitSound('Spawn')
         ChangeState(self, self.KillingState)
     end,
