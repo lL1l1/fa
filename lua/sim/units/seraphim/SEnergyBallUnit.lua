@@ -40,6 +40,9 @@ local EntityGetPositionXYZ = moho.entity_methods.GetPositionXYZ
 local SHoverLandUnit = import('/lua/seraphimunits.lua').SHoverLandUnit
 local DefaultBeamWeapon = import('/lua/sim/DefaultWeapons.lua').DefaultBeamWeapon
 
+-- precompute categories
+local lightningTargetCategory = categories.ALLUNITS - categories.UNTARGETABLE
+
 -- Seraphim energy ball units
 ---@class SEnergyBallUnit : SHoverLandUnit
 SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
@@ -94,13 +97,17 @@ SEnergyBallUnit = ClassUnit(SHoverLandUnit) {
 
             while true do
                 local location = EntityGetPosition(self)
-                local targets = aiBrain:GetUnitsAroundPoint(categories.LAND - categories.UNTARGETABLE, location, weaponMaxRange)
+                local targets = aiBrain:GetUnitsAroundPoint(lightningTargetCategory, location, weaponMaxRange)
 
-                -- filter out units within min range
                 local n = TableGetn(targets)
                 for i = n, 1, -1 do
                     local target = targets[i]
                     if target == self then continue end
+                    -- filter out underwater units because beams can't go through water
+                    -- filter out units in the air since beams have issues hitting allied flying units due to an engine bug
+                    local layer = target.Layer
+                    if layer == "Seabed" or layer == "Sub" or layer == "Air" then continue end
+                    -- filter out units within min range
                     reusedTable[1], reusedTable[2], reusedTable[3] = EntityGetPositionXYZ(target)
                     if VDist3(location, reusedTable) < weaponMinRange then
                         target[i], target[n] = target[n], nil
