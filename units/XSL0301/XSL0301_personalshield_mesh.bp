@@ -3,9 +3,10 @@ MeshBlueprint{
     LODs = {
         {
             LODCutoff = 195,
-            LookupName = "/textures/environment/Falloff_seraphim_lookup.dds",
-            Scrolling = true,
-            SecondaryName = "/effects/entities/PhaseShield/PhaseShieldLookup.dds",
+            LookupName = "/effects/Entities/SeraphimShield01/SeraphimShield01_Normals3.dds",
+            Scrolling = false,
+            SecondaryName = "/effects/Entities/SeraphimShield01/SeraphimShield01_Specular2.dds",
+            TextureName = "/effects/Entities/SeraphimShield01/SeraphimShield01_Albedo.dds",
             ShaderName = "SeraphimPersonalShield",
             MeshName = "xsl0301_lod0.scm",
             AlbedoName = "xsl0301_albedo.dds",
