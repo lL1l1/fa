@@ -4160,51 +4160,17 @@ float4 CybranPhaseShieldPS( VERTEXNORMAL_VERTEX vertex ) : COLOR
 }
 
 
-float4 SeraphimPhaseShieldPS( EFFECT_NORMALMAPPED_VERTEX vertex ) : COLOR
+float4 SeraphimPhaseShieldPS( VERTEXNORMAL_VERTEX vertex ) : COLOR
 {
-    if ( 1 == mirrored )
-        clip(vertex.depth.x);
+    if ( 1 == mirrored ) clip(vertex.depth.x);
 
-    float4 normal_pixel = tex2D( lookupSampler, vertex.texcoord1.zw );
-    float3x3 rotationMatrix = float3x3( vertex.binormal, vertex.tangent, vertex.normal );
-    float3 normal = ComputeNormal( lookupSampler, vertex.texcoord1.zw, rotationMatrix );
-    float4 uvaddress = tex2D( lookupSampler, vertex.texcoord1.xy );
-    float2 texcoord = vertex.texcoord0.xy + (uvaddress.rb * 0.1);
-    float4 specular = tex2D( secondarySampler, texcoord );
+    float4 uvaddress = vertex.texcoord0 * 2;
+    uvaddress.x += vertex.material.x / 80;
+    uvaddress.y += vertex.material.x / 32;
+    float4 specular = tex2D( secondarySampler, uvaddress );
 
-    float m = abs( normal_pixel.g - 0.5 );
-    const float max_brightness = 0.453;
-    float dp = abs( cos(dot( float4(0,1,0,0), normal )) );
-    float channel_color = max_brightness - clamp((1.0 - dp), 0, max_brightness );
-    float t = abs(dot(float4(0,1,0,0), normalize(vertex.normal)));
-    float time_cutoff = 0.753;
-    float dp2 = abs(dot(vertex.viewDirection,normal));
-
-    ///If we are not close enough to the top of the shield dome...
-    if( t < time_cutoff )
-    {
-        m = 1.0;	/// This alpha multiple won't change alpha (So we are not fading to near transparency yet).
-    }
-    else
-    {
-        // NOTE: From right to left in the equation.
-        // Get a percentage multiple of how close we are to the top of the dome from the
-        // point where we want to start an alpha gradient to (close to) transparency. Using that
-        // we mutliply by 0.7 in order to get a percentage of a percentage multiple that is less than one.
-        // Then that is all subtracted from one, the closer we are to the top of the dome, the more we
-        // are subtracting 0.7 from 1.0 and the closer our final percentage multiple is to 0.4, where the
-        // final percentage multiple ('m') starts out at one. 0.7 is used to ensure that we do not go to complete
-        // transparency and retain some feeling of a sphere around the top area of the dome.
-        m = 1.0 - 0.7 * (t - time_cutoff) / (1.0 - time_cutoff);
-    }
-
-    ///Compute the final translucency value.
-    float alpha = m *( dp2 * 0.3 + channel_color )*1.75;
-    alpha *= shieldWaterAbsorption(vertex.depth.x);
-
-    // Multiples(0.425,0.76274,1.0) are to give a blue tint. The dot product of the normal and the world up vector is squared
-    // so that the blue and whitish color fade off in an exponential gradient.
-    return  float4( 0.425 * dp * dp * specular.r, 0.76274 * dp * dp * specular.g, 1.0 * dp * dp * specular.b, alpha );
+    // Multiples(0.425,0.76274,1.0) are to give a blue tint.
+    return  float4( 0.425 * specular.r, 0.76274 * specular.g, 1.0 * specular.b, 0.9);
 }
 
 float4 StunnedUnit( VERTEXNORMAL_VERTEX vertex ) : COLOR
@@ -7472,22 +7438,7 @@ technique SeraphimPersonalShield_HighFidelity
         AlphaState( AlphaBlend_SrcAlpha_One_Write_RGB )
         RasterizerState( Rasterizer_Cull_CW )
 
-        VertexShader = compile vs_1_1 ShieldPositionNormalOffsetVS(
-        0.02, // normalOffset
-        5/3, // texScale0
-        1/3, // texScale1
-        1/3, // texScale2
-        11/3, // texScale3
-        -0.00153, // texXshift0
-        0.0159, // texYshift0
-        0, // texXshift1
-        0, // texYshift1
-        0.003/3, // texXshift2
-        -0.0045/3, // texYshift2
-        -0.005/3, // texXshift3
-        -0.045/3 // texYshift3
-        ); 
-
+        VertexShader = compile vs_1_1 PositionNormalOffsetVS(0.02);
         PixelShader = compile ps_2_0 SeraphimPhaseShieldPS();
     }
 }
@@ -7501,7 +7452,7 @@ technique SeraphimPersonalShield_MedFidelity
     string depthTechnique = "Depth";
     int renderStage = STAGE_DEPTH + STAGE_REFLECTION + STAGE_PREWATER + STAGE_PREEFFECT;
 
-    int parameter = PARAM_FRACTIONHEALTH;
+    int parameter = PARAM_LIFETIME;
 
     string environment = "<seraphim>";
 >
@@ -7533,7 +7484,7 @@ technique SeraphimPersonalShield_LowFidelity
     string depthTechnique = "Depth";
     int renderStage = STAGE_DEPTH + STAGE_REFLECTION + STAGE_PREWATER + STAGE_PREEFFECT;
 
-    int parameter = PARAM_FRACTIONHEALTH;
+    int parameter = PARAM_LIFETIME;
 
     string environment = "<seraphim>";
 >
