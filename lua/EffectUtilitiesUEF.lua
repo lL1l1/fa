@@ -73,10 +73,26 @@ function CreateDefaultBuildBeams(builder, unitBeingBuilt, buildEffectBones, buil
 
     local waitTime = Random(8, 15)
     local waitTimeInv =  10 / waitTime
+    local bpBeingBuilt = unitBeingBuilt.Blueprint
+    local sx, sy, sz = bpBeingBuilt.SizeX, bpBeingBuilt.SizeY, bpBeingBuilt.SizeZ
+    local sxHalf, szHalf = sx/2, sz/2
+    local offsetY = bpBeingBuilt.CollisionOffsetY or 0
+
+    local GetHeading = unitBeingBuilt.GetHeading
+    local cos, sin = math.cos, math.sin
     while not (EntityBeenDestroyed(builder) or EntityBeenDestroyed(unitBeingBuilt)) do
-        local x, y, z = builder.GetRandomOffset(unitBeingBuilt, 1)
+        local heading = GetHeading(unitBeingBuilt)
+        local cosHd, sinHd = cos(heading), sin(heading)
         local px, py, pz = EntityGetPositionXYZ(beamEndBuilder)
-        local dx, dy, dz = waitTimeInv * (ox + x - px), waitTimeInv * (oy + y - py), waitTimeInv * (oz + z - pz)
+
+        local rz = Random() * sz - szHalf
+        local rx = Random() * sx - sxHalf
+
+        local dy = waitTimeInv * (oy + Random() * sy + offsetY - py)
+
+        local dx = waitTimeInv * (ox + cosHd * rx - sinHd * rz - px)
+        local dz = waitTimeInv * (oz + sinHd * rx + cosHd * rz - pz)
+
         ProjectileSetVelocity(beamEndBuilder, dx, dy, dz)
         WaitTicks(waitTime)
     end
