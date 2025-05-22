@@ -58,8 +58,28 @@ function CreateDefaultBuildBeams(builder, unitBeingBuilt, buildEffectBones, buil
 
     -- reset the state of the projectile
     ProjectileSetVelocity(beamEndBuilder, 0)
-    TrashBagAdd(buildEffectsBag, CreateEmitterOnEntity(beamEndBuilder, army, '/effects/emitters/build_terran_glow_01_emit.bp'))
-    TrashBagAdd(buildEffectsBag,  CreateEmitterOnEntity(beamEndBuilder, army, '/effects/emitters/sparks_08_emit.bp'))
+    -- Limiting the spark and glow effects massively reduces sim lag when zoomed in on hundreds of builders
+    local numEffects = unitBeingBuilt.NumUefBuildBeamFx or 0
+    if numEffects < 50 then
+        TrashBagAdd(buildEffectsBag, CreateEmitterOnEntity(beamEndBuilder, army, '/effects/emitters/build_terran_glow_01_emit.bp'))
+        TrashBagAdd(buildEffectsBag,  CreateEmitterOnEntity(beamEndBuilder, army, '/effects/emitters/sparks_08_emit.bp'))
+        -- increment number of effects
+        unitBeingBuilt.NumUefBuildBeamFx = numEffects + 1
+
+        -- hook the trashbag to decrement number of effects (somewhat of a hack but it makes it consistent)
+        -- hook the meta table since the table has weak values which garbage collects the new function if put there
+        local oldDestroy = buildEffectsBag.Destroy
+        local oldMeta = getmetatable(buildEffectsBag)
+        local metaHook = table.copy(oldMeta)
+        setmetatable(buildEffectsBag, metaHook)
+        metaHook.Destroy = function(self)
+            unitBeingBuilt.NumUefBuildBeamFx = unitBeingBuilt.NumUefBuildBeamFx - 1
+
+            setmetatable(self, oldMeta)
+            metaHook = nil
+            oldDestroy(self)
+        end
+    end
 
     vc[1], vc[2], vc[3] = ox, oy, oz
     Warp(beamEndBuilder, vc)
