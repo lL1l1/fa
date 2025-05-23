@@ -115,7 +115,31 @@ if replayID then
     LOG("REPLAY ID: " .. replayID)
 end
 
+ExtraSelectList = setmetatable({}, {__mode = 'k'})
+
 do
+    local oldAdd = AddToSessionExtraSelectList
+    _G.AddToSessionExtraSelectList = function(unit)
+        oldAdd(unit)
+        LOG("Add extra selection", unit:GetEntityId())
+        ExtraSelectList[unit] = true
+    end
+
+    local oldRemove = RemoveFromSessionExtraSelectList
+    RemoveFromSessionExtraSelectList = function(unit)
+        oldRemove(unit)
+        LOG("Remove extra selection", unit:GetEntityId())
+        ExtraSelectList[unit] = nil
+    end
+
+    local oldClear = ClearSessionExtraSelectList
+    ClearSessionExtraSelectList = function()
+        oldClear()
+        LOG("Clear extra selection")
+        for i, _ in ExtraSelectList do
+            ExtraSelectList[i] = nil
+        end
+    end
 
     -- Moderation functionality
     -- The following hooks and/or overloads exist to assist moderators in evaluation faul play

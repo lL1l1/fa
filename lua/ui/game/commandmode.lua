@@ -686,6 +686,21 @@ function OnCommandIssued(command)
         issuedOneCommand = true
     end
 
+    local ctype = command.CommandType
+    if ctype == 'TransportUnloadSpecificUnits' then
+        local str = 'unload specific: '
+        ---@param unit UserUnit
+        for _, unit in command.Units do
+            if ExtraSelectList[unit] then
+                str = str .. tostring(unit:GetEntityId()) .. ', '
+                -- ExtraSelectList[unit] = nil
+            end
+        end
+        LOG(str)
+    elseif ctype == 'TransportUnloadUnits' then
+        LOG('unload all')
+    end
+
     -- If our callback returns true or we don't have a command type, we skip the rest of our logic
     if (OnCommandIssuedCallback[command.CommandType] and OnCommandIssuedCallback[command.CommandType](command))
     or command.CommandType == 'None' then
