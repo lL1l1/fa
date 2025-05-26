@@ -97,7 +97,8 @@ Health: %f
                 rebuiltUnit:SetHealth(nil, factory.FacRebuild_Health)
             end
 
-            -- clean up after the rebuilding
+            -- clean up so that transferring doesn't rebuild units again
+            factory.FacRebuild_UnitId = nil
             factory.FacRebuild_Progress = nil
             factory.FacRebuild_BuildTime = nil
             factory.FacRebuild_Health = nil
@@ -185,10 +186,10 @@ function TransferUnitsOwnership(units, toArmy, captured, noRestrictions)
         local defaultBuildRate
         local upgradeBuildTimeComplete
         local exclude
-        local FacRebuild_UnitId
-        local FacRebuild_Progress
-        local FacRebuild_BuildTime
-        local FacRebuild_Health
+        local FacRebuild_UnitId = unit.FacRebuild_UnitId
+        local FacRebuild_Progress = unit.FacRebuild_Progress
+        local FacRebuild_BuildTime = unit.FacRebuild_BuildTime
+        local FacRebuild_Health = unit.FacRebuild_Health
 
         local shield = unit.MyShield
         if shield then
@@ -380,6 +381,9 @@ function TransferUnitsOwnership(units, toArmy, captured, noRestrictions)
             else
                 table.insert(data, newFactoryUnit)
             end
+            -- store data for rebuilding
+            -- unit id is not needed during rebuild but is needed if transferred again in the middle of rebuild
+            newFactoryUnit.FacRebuild_UnitId = FacRebuild_UnitId
             newFactoryUnit.FacRebuild_Progress = FacRebuild_Progress
             newFactoryUnit.FacRebuild_BuildTime = FacRebuild_BuildTime
             newFactoryUnit.FacRebuild_Health = FacRebuild_Health
