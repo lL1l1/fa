@@ -276,6 +276,7 @@ Callbacks.AttackMove = function(data, units)
     -- Verify that the user manually clicked to issue the command, and use that position.
     -- assume all units in the selection were given the same order, so we only need to check one unit
     local commandQueue = allNonStructures[1]:GetCommandQueue()
+    LOG(GetGameTick(), 'GetCQueue', units[1].Brain.Nickname)
     local lastcommand = commandQueue[TableGetn(commandQueue)]
     -- dummy script task should be used, although we can't check the script task's type
     if UnitQueueDataToCommand[lastcommand.commandType].Type ~= "Script" then return end
@@ -837,10 +838,10 @@ do
     ---@param data UIShareableBrushStrokeCallbackMessage
     local SyncPainting = function(data)
         -- used to determine the color of the painting
-        data.ShareablePainting.PeerName = GetArmyBrain(GetCurrentCommandSource()).Nickname
+        -- data.ShareablePainting.PeerName = GetArmyBrain(GetCurrentCommandSource()).Nickname
 
-        Sync.SharePaintingBrushStroke = Sync.SharePaintingBrushStroke or {}
-        table.insert(Sync.SharePaintingBrushStroke, data)
+        -- Sync.SharePaintingBrushStroke = Sync.SharePaintingBrushStroke or {}
+        -- table.insert(Sync.SharePaintingBrushStroke, data)
     end
 
     ---@param data UIShareableBrushStrokeCallbackMessage

@@ -139,6 +139,17 @@ FactoryUnit = ClassUnit(StructureUnit) {
 
         -- Factory can stop building but still have an unbuilt unit if a mobile build order is issued and the order is cancelled
         if unitBeingBuilt:GetFractionComplete() < 1 then
+            local bpEco = unitBeingBuilt.Blueprint.Economy
+            local eff = self:GetResourceConsumed()
+            local t = GetGameTick()
+            local fraction = unitBeingBuilt:GetFractionComplete()
+            local eta = math.ceil((bpEco.BuildTime / self:GetBuildRate()) * (1-fraction) / eff * 10) + t
+            self:DebugLog(GetGameTick()
+                , 'Factory OnStopBuild'
+                , unitBeingBuilt:GetFractionComplete()
+                , unitBeingBuilt.UnitId
+                , 'eta: ' .. tostring( eta )
+            )
             unitBeingBuilt:Destroy()
         end
 

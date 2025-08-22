@@ -807,6 +807,7 @@ end
 ---@return Unit[]?
 function TransferUnitsToBrain(self, brains, transferUnfinishedUnits, categoriesToTransfer, reason)
     if not table.empty(brains) then
+        LOG('Transferring units', GetGameTick(), self.Nickname)
         local units
         if transferUnfinishedUnits then
             local indexes = {}
