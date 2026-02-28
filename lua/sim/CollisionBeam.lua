@@ -18,6 +18,15 @@ local ScenarioFramework = import("/lua/scenarioframework.lua")
 local GetTerrainType = GetTerrainType
 local DefaultTerrainType = GetTerrainType(-1, -1)
 
+local hitsPerTick = 0
+local lastTick = 0
+local missedBeams = {}
+local function tableClear(t)
+    for k, _ in t do
+        t[k] = nil
+    end
+end
+
 ---@class CollisionBeam : moho.CollisionBeamEntity
 ---@field unit Unit
 ---@field Weapon Weapon
@@ -128,6 +137,23 @@ CollisionBeam = Class(moho.CollisionBeamEntity) {
 
         if instigator then
             local radius = damageData.DamageRadius
+            if targetEntity then
+                local tick = GetGameTick()
+                if tick ~= lastTick then
+                    if hitsPerTick ~= 2 then
+                        LOG(tostring(hitsPerTick) .. " beams hit last tick")
+                        for _, u in missedBeams do
+                            u:DebugLog("Missed their beam last tick.")
+                        end
+                    end
+                    lastTick = tick
+                    hitsPerTick = 0
+                    tableClear(missedBeams)
+                end
+                hitsPerTick = hitsPerTick + 1
+            else
+                table.insert(missedBeams, self.unit)
+            end
             if radius and radius > 0 then
                 if not damageData.DoTTime or damageData.DoTTime <= 0 then
                     DamageArea(instigator, self:GetPosition(1), radius, damage, damageData.DamageType or 'Normal', damageData.DamageFriendly or false)
