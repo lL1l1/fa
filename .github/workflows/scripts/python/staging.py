@@ -316,8 +316,9 @@ class Status:
 
 
 def pr_link(pr):
-    # A full link instead of #123 keeps the comment out of the timeline of the other pull request
-    return f"[#{pr}]({REPO_URL}/pull/{pr})"
+    # GitHub adds a cross-reference to the timeline of the other pull request
+    # for #123 and for plain links, but not for links through redirect.github.com
+    return f"[#{pr}](https://redirect.github.com/{REPO}/pull/{pr})"
 
 
 def pr_commit(pr, sha):
