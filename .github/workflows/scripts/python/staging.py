@@ -141,9 +141,9 @@ def plural(count, word):
 def duration(seconds):
     days = int(seconds // 86400)
     if seconds < 3600:
-        return plural(max(1, round(seconds / 60)), "minute")
+        return plural(max(1, int(seconds // 60)), "minute")
     if days == 0:
-        return plural(round(seconds / 3600), "hour")
+        return plural(int(seconds // 3600), "hour")
     weeks, days = divmod(days, 7)
     parts = ([plural(weeks, "week")] if weeks else []) + ([plural(days, "day")] if days else [])
     return " and ".join(parts)
