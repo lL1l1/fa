@@ -140,8 +140,10 @@ def plural(count, word):
 
 def duration(seconds):
     days = int(seconds // 86400)
+    if seconds < 3600:
+        return plural(max(1, round(seconds / 60)), "minute")
     if days == 0:
-        return plural(max(1, round(seconds / 3600)), "hour")
+        return plural(round(seconds / 3600), "hour")
     weeks, days = divmod(days, 7)
     parts = ([plural(weeks, "week")] if weeks else []) + ([plural(days, "day")] if days else [])
     return " and ".join(parts)
@@ -294,7 +296,7 @@ class Status:
             self.data["notified"] = key
             users = sorted({u for u in users if u and u != BOT and not u.endswith("[bot]")})
             mentions = " ".join("@" + u for u in users)
-            mention = f"\n\n🔔 {mentions}: {reason}" if users else f"\n\n🔔 {reason[0].upper()}{reason[1:]}"
+            mention = f"\n\n🔔 {mentions}: {reason}" if users else f"\n\n🔔 {reason}"
         else:
             notify = None
 
